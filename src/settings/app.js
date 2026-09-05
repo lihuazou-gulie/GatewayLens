@@ -34,7 +34,7 @@ submit("connection-form", async () => {
 });
 submit("display-form", async () => {
   await api.request("admin/display", { method: "PUT", body: { revision: settings.revision, display: readDisplay() } });
-  await loadSettings(); message("展示设置已保存，可以打开面板查看。");
+  await loadSettings(); message(settings.display.public ? "展示设置已保存，游客现在可以直接打开面板，无需登录。" : "展示设置已保存，当前仅登录后的管理员可查看。");
 });
 submit("password-form", async () => {
   await api.request("admin/password", { method: "POST", body: { currentPassword: document.getElementById("current-password").value, password: document.getElementById("new-password").value } });

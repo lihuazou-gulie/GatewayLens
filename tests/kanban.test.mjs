@@ -72,6 +72,28 @@ test("private dashboard and hidden modules are enforced on backend", async (t) =
   const data = (await h.request("monitor", { auth: false })).data;
   assert.equal(data.summary.capacity, null); assert.equal(data.summary.pool, null); assert.equal(data.models.data, null); assert.deepEqual(data.traffic, []);
 });
+
+test("guests can view configured groups by default while setup and administration remain private", async (t) => {
+  const h = await harness(t);
+  assert.equal((await h.request("monitor", { auth: false })).status, 401);
+  await h.setup(); await h.connect();
+  const settings = (await h.request("admin/settings")).data;
+  assert.equal(settings.display.public, true);
+  assert.equal((await h.request("monitor", { auth: false })).status, 401);
+  const display = { ...settings.display, groups: [{ id: DEMO_GROUPS[0].id, label: "公开分组" }] };
+  assert.equal((await h.request("admin/display", { method: "PUT", body: { revision: settings.revision, display } })).status, 200);
+  await h.request("logout", { body: {} });
+  const guest = await h.request("monitor", { auth: false });
+  assert.equal(guest.status, 200); assert.equal(guest.data.groups.length, 1);
+  assert.equal(guest.data.groups[0].label, "公开分组"); assert.equal("system" in guest.data, false);
+  assert.equal((await h.request("admin/settings", { auth: false })).status, 401);
+  assert.equal((await h.request("admin/display", { auth: false, method: "PUT", body: { revision: h.store.revision, display } })).status, 401);
+  assert.equal((await new SettingsStore(h.dir).init()).state.display.public, true);
+  await h.request("login", { body: { password: PASSWORD } });
+  await h.display({ public: false });
+  assert.equal((await h.request("monitor", { auth: false })).status, 401);
+  assert.equal((await new SettingsStore(h.dir).init()).state.display.public, false);
+});
 test("partial endpoints keep healthy sections and do not fabricate zero metrics", async (t) => {
   const failures = new Map([["/admin/ops/concurrency", 403], ["/admin/channel-monitor-v2/models", 404]]);
   const h = await harness(t, { failures }); await h.setup(); await h.connect(); await h.display();
@@ -121,7 +143,8 @@ test("settings changes detect stale revisions and source changes reset published
   assert.equal((await h.request("admin/display", { method: "PUT", body: { revision: 0, display: h.store.state.display } })).status, 409);
   const source = fixtureSub2Api(); const port = await listen(source); t.after(() => { source.closeAllConnections(); source.close(); });
   const result = await h.request("admin/connection", { body: { site: `http://127.0.0.1:${port}`, apiKey: DEMO_KEY, revision: h.store.revision } });
-  assert.equal(result.status, 200); assert.deepEqual(h.store.state.display.groups, []); assert.equal(h.store.state.display.public, false);
+  assert.equal(result.status, 200); assert.deepEqual(h.store.state.display.groups, []); assert.equal(h.store.state.display.public, true);
+  assert.equal((await h.request("monitor", { auth: false })).status, 401);
 });
 test("static paths deny settings files, source internals, and old Runtime APIs", async (t) => {
   const h = await harness(t);

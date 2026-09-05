@@ -1,6 +1,6 @@
 import { HttpError } from "../errors.mjs";
 export const MODULES = ["quality", "traffic", "capacity", "pool", "models"];
-export const DEFAULT_DISPLAY = Object.freeze({ title: "Sub2API 监控", public: false, groups: [], imageModels: [],
+export const DEFAULT_DISPLAY = Object.freeze({ title: "Sub2API 监控", public: true, groups: [], imageModels: [],
   modules: Object.fromEntries(MODULES.map((key) => [key, true])), poolThreshold: 35 });
 export function validateDisplay(input, catalog) {
   if (!input || typeof input !== "object") throw new HttpError(400, "设置格式无效");

@@ -17,7 +17,7 @@
 <label>图片专题模型<textarea id="image-models" rows="3" placeholder="填写准确模型名，每行一个。留空则不启用图片专题筛选。"></textarea></label>
 <p class="field-note">模型专题需要 Sub2API 的渠道监控 V2。图片请求次数不等于生成张数；分组并发也可能包含文本请求。</p>
 <label>号池可用率警报阈值（%）<input id="pool-threshold" type="number" min="0" max="100" step="0.1" required></label>
-<label class="checkbox-line"><input id="public-display" type="checkbox"><span>允许访客查看已选分组的聚合指标</span></label><p class="field-note">关闭时仅登录后的管理员可查看。系统资源数据始终仅管理员可见。</p>
+<label class="checkbox-line"><input id="public-display" type="checkbox"><span>允许访客查看已选分组的聚合指标</span></label><p class="field-note">默认开启，选择分组并保存后，游客无需登录即可查看面板。关闭时仅管理员可查看；管理设置和系统资源数据始终需要管理员登录。</p>
 <div class="form-actions"><button class="button primary" type="submit">保存展示设置</button><a class="button subtle" href="/">查看面板 ↗</a></div></form></section>
 <details class="panel settings-panel"><summary>修改管理密码</summary><form id="password-form"><label>当前密码<input id="current-password" type="password" autocomplete="current-password" required></label><label>新密码<input id="new-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required></label><button class="button subtle" type="submit">更新密码</button></form></details>
 </div></main><footer><span>凭证加密保存在部署者自己的服务器</span><span>仅通过 Sub2API 管理接口读取监控数据</span></footer></div></body></html>

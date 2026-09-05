@@ -44,7 +44,7 @@ export class MonitoringService {
     this.sync();
     const revision = this.store.revision;
     const display = structuredClone(this.store.state.display);
-    if (!display.public && !admin) throw new HttpError(401, "面板尚未公开，请登录后查看");
+    if (!admin && (!display.public || !this.client || !display.groups.length)) throw new HttpError(401, "面板尚未公开，请登录后查看");
     let groups = display.groups;
     if (scope !== "all") {
       groups = groups.filter((g) => this.store.scopeId(g.id) === scope);
