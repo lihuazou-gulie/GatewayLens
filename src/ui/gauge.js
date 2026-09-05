@@ -1,9 +1,11 @@
 import { finite } from "../data/numbers.js";
+import { setAttribute, setStyle, toggleClass } from "./dom.js";
 
 const CENTER_X = 110;
 const CENTER_Y = 122;
 const ARC_RADIUS = 86;
 const TICK_COUNT = 40;
+const gaugeValues = new WeakMap();
 
 function pointAt(value, radius) {
   const angle = (180 + value * 1.8) * Math.PI / 180;
@@ -43,20 +45,22 @@ export function gaugeSvgMarkup() {
 
 export function updateGaugeVisual(card, value) {
   const normalized = Math.max(0, Math.min(100, finite(value, 0)));
-  card.style.setProperty("--gauge-value", String(normalized / 100));
-  card.style.setProperty("--gauge-angle", `${-90 + normalized * 1.8}deg`);
+  if (gaugeValues.get(card) === normalized) return;
+  gaugeValues.set(card, normalized);
+  setStyle(card, "--gauge-value", String(normalized / 100));
+  setStyle(card, "--gauge-angle", `${-90 + normalized * 1.8}deg`);
 
   const point = pointAt(normalized, ARC_RADIUS);
   const glow = card.querySelector(".gpt-gauge-point-glow");
   const marker = card.querySelector(".gpt-gauge-point");
   [glow, marker].forEach((element) => {
     if (!element) return;
-    element.setAttribute("cx", point.x.toFixed(2));
-    element.setAttribute("cy", point.y.toFixed(2));
+    setAttribute(element, "cx", point.x.toFixed(2));
+    setAttribute(element, "cy", point.y.toFixed(2));
   });
 
   const activeIndex = Math.round(normalized / 100 * TICK_COUNT);
   card.querySelectorAll(".gpt-gauge-tick").forEach((tick) => {
-    tick.classList.toggle("is-active", Number(tick.dataset.tickIndex) <= activeIndex);
+    toggleClass(tick, "is-active", Number(tick.dataset.tickIndex) <= activeIndex);
   });
 }

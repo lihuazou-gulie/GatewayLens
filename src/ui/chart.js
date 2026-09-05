@@ -1,4 +1,5 @@
 import { compactNumber, percent, rangeLabel } from "./formatters.js";
+import { setAttribute, writeText } from "./dom.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const CHART_WIDTH = 920;
@@ -89,6 +90,9 @@ export function drawTrendChart(svg, buckets, range) {
   if (!svg) return;
   const state = getChartState(svg);
   const safeBuckets = Array.isArray(buckets) ? buckets : [];
+  const signature = JSON.stringify([range, safeBuckets]);
+  if (state.signature === signature) return;
+  state.signature = signature;
   const rangeChanged = state.range !== null && state.range !== range;
   state.range = range;
 
@@ -99,7 +103,7 @@ export function drawTrendChart(svg, buckets, range) {
     state.bars.clear();
     state.labels.clear();
     state.dots.clear();
-    state.line.setAttribute("d", "");
+    setAttribute(state.line, "d", "");
     state.line.classList.remove("is-entering");
     state.initialized = false;
     return;
@@ -117,15 +121,15 @@ export function drawTrendChart(svg, buckets, range) {
     const y = MARGIN.top + plotHeight - plotHeight * step;
     const gridLine = svg.querySelector(`[data-grid-step="${step}"]`);
     if (gridLine) {
-      gridLine.setAttribute("x1", MARGIN.left);
-      gridLine.setAttribute("x2", CHART_WIDTH - MARGIN.right);
-      gridLine.setAttribute("y1", y);
-      gridLine.setAttribute("y2", y);
+      setAttribute(gridLine, "x1", MARGIN.left);
+      setAttribute(gridLine, "x2", CHART_WIDTH - MARGIN.right);
+      setAttribute(gridLine, "y1", y);
+      setAttribute(gridLine, "y2", y);
     }
     const label = state.gridLabels[index];
-    label.setAttribute("x", MARGIN.left - 10);
-    label.setAttribute("y", y + 4);
-    label.textContent = compactNumber(maxTotal * step);
+    setAttribute(label, "x", MARGIN.left - 10);
+    setAttribute(label, "y", y + 4);
+    writeText(label, compactNumber(maxTotal * step));
   });
 
   safeBuckets.forEach((bucket, index) => {
@@ -147,12 +151,12 @@ export function drawTrendChart(svg, buckets, range) {
     } else if (rangeChanged) {
       restartEntering(entry.rect, Math.min(index * 18, 420));
     }
-    entry.rect.setAttribute("x", x - barWidth / 2);
-    entry.rect.setAttribute("y", y);
-    entry.rect.setAttribute("width", barWidth);
-    entry.rect.setAttribute("height", Math.max(2, barHeight));
-    entry.rect.setAttribute("opacity", total ? 0.86 : 0.22);
-    entry.title.textContent = `${rangeLabel(bucket.started_at, range)} · ${compactNumber(total)} 请求${bucket.success_rate == null ? "" : ` · ${percent(bucket.success_rate)}`}`;
+    setAttribute(entry.rect, "x", x - barWidth / 2);
+    setAttribute(entry.rect, "y", y);
+    setAttribute(entry.rect, "width", barWidth);
+    setAttribute(entry.rect, "height", Math.max(2, barHeight));
+    setAttribute(entry.rect, "opacity", total ? 0.86 : 0.22);
+    writeText(entry.title, `${rangeLabel(bucket.started_at, range)} · ${compactNumber(total)} 请求${bucket.success_rate == null ? "" : ` · ${percent(bucket.success_rate)}`}`);
 
     const rate = bucket.success_rate == null ? null : Number(bucket.success_rate);
     const point = rate !== null && Number.isFinite(rate) ? { key, x, y: MARGIN.top + plotHeight - (rate / 100) * plotHeight } : null;
@@ -162,9 +166,9 @@ export function drawTrendChart(svg, buckets, range) {
     const oldLabel = state.labels.get(key);
     if (shouldLabel) {
       const label = oldLabel || node("text", { class: "chart-axis-label", "text-anchor": "middle" });
-      label.setAttribute("x", x);
-      label.setAttribute("y", CHART_HEIGHT - 12);
-      label.textContent = rangeLabel(bucket.started_at, range);
+      setAttribute(label, "x", x);
+      setAttribute(label, "y", CHART_HEIGHT - 12);
+      writeText(label, rangeLabel(bucket.started_at, range));
       if (!oldLabel) svg.querySelector('[data-layer="labels"]').append(label);
       state.labels.set(key, label);
     } else if (oldLabel) {
@@ -182,8 +186,8 @@ export function drawTrendChart(svg, buckets, range) {
     } else if (rangeChanged) {
       restartEntering(dot, 760 + Math.min(index * 18, 420));
     }
-    dot.setAttribute("cx", point.x);
-    dot.setAttribute("cy", point.y);
+    setAttribute(dot, "cx", point.x);
+    setAttribute(dot, "cy", point.y);
   });
 
   removeStale(state.bars, activeKeys);
@@ -191,7 +195,7 @@ export function drawTrendChart(svg, buckets, range) {
   removeStale(state.dots, activeKeys);
 
   let connected = false;
-  state.line.setAttribute("d", points.map((point) => { if (!point) { connected = false; return ""; } const command = connected ? "L" : "M"; connected = true; return `${command} ${point.x} ${point.y}`; }).join(" "));
+  setAttribute(state.line, "d", points.map((point) => { if (!point) { connected = false; return ""; } const command = connected ? "L" : "M"; connected = true; return `${command} ${point.x} ${point.y}`; }).join(" "));
   if (!state.initialized) {
     setEntering(state.line, 160);
   } else if (rangeChanged) {

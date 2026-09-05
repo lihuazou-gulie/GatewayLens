@@ -2,7 +2,7 @@ import { KanbanApi } from "./api/client.js";
 import { createStore } from "./core/store.js";
 import { Poller } from "./core/poller.js";
 import { initAmbientEffects } from "./ui/effects.js";
-import { render } from "./monitor/render.js";
+import { createMonitorRenderer } from "./monitor/render.js";
 const api = new KanbanApi(); const params = new URLSearchParams(location.search);
 const store = createStore({ view: location.pathname === "/models" ? "models" : location.pathname === "/groups" ? "groups" : "overview",
   range: params.get("range") || "24h", scope: params.get("scope") || "all", topic: params.get("topic") || "", model: "", knownModels: [], data: null, error: "", loading: true, admin: false });
@@ -21,6 +21,7 @@ async function refresh() {
   }
 }
 const poller = new Poller({ intervalMs: 30000, tick: () => document.visibilityState === "hidden" ? Promise.resolve() : refresh() });
+const render = createMonitorRenderer();
 store.subscribe(render); render(store.get()); initAmbientEffects();
 document.getElementById("refresh-button").addEventListener("click", () => void poller.trigger());
 document.querySelectorAll("[data-range]").forEach((button) => button.addEventListener("click", () => { store.set({ range: button.dataset.range }); void refresh(); }));
