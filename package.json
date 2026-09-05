@@ -1,0 +1,11 @@
+{
+  "name": "sub2api-monitor",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.mjs",
+    "demo": "node scripts/demo.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

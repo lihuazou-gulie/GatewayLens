@@ -1,0 +1,24 @@
+.gpt-gauge { position: relative; width: 176px; height: 132px; }
+.gpt-gauge-svg { width: 100%; height: 100%; overflow: visible; }
+.gpt-gauge-track, .gpt-gauge-progress, .gpt-gauge-sweep { fill: none; stroke-linecap: round; }
+.gpt-gauge-track { stroke: rgba(149,194,178,.12); stroke-width: 13; }
+.gpt-gauge-progress { stroke: var(--card-accent); stroke-width: 13; stroke-dasharray: var(--gauge-value, 0) 1; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--card-accent) 55%, transparent)); transition: stroke-dasharray 900ms cubic-bezier(.2,.8,.2,1); }
+.gpt-gauge-scale { overflow: visible; }
+.gpt-gauge-tick { stroke: rgba(237,247,242,.28); stroke-width: 1.4; stroke-linecap: round; transition: stroke 520ms ease, stroke-width 520ms ease, filter 520ms ease; }
+.gpt-gauge-tick.is-major { stroke: rgba(237,247,242,.62); stroke-width: 2.2; }
+.gpt-gauge-tick.is-active { stroke: var(--card-accent); filter: drop-shadow(0 0 4px color-mix(in srgb, var(--card-accent) 78%, transparent)); }
+.gpt-gauge-tick.is-active.is-major { stroke-width: 2.6; }
+.gpt-gauge-scale-label { fill: rgba(237,247,242,.5); font-family: var(--font-mono); font-size: 7px; letter-spacing: .03em; }
+.gpt-gauge-sweep { stroke: rgba(255,255,255,.25); stroke-width: 2; stroke-dasharray: .04 .96; transform-origin: 110px 122px; animation: gptSweep 4.8s linear infinite; }
+.gpt-gauge-point-glow { fill: var(--card-accent); opacity: .38; filter: drop-shadow(0 0 9px var(--card-accent)); transform-box: fill-box; transform-origin: center; animation: gptPointPulse 1.9s ease-in-out infinite; }
+.gpt-gauge-point { fill: var(--card-accent); stroke: var(--text); stroke-width: 1.5; filter: drop-shadow(0 0 6px var(--card-accent)); transition: cx 950ms cubic-bezier(.2,.8,.2,1), cy 950ms cubic-bezier(.2,.8,.2,1); }
+.gpt-gauge-needle { stroke: var(--text); stroke-width: 3; stroke-linecap: round; transform: rotate(var(--gauge-angle, -90deg)); transform-origin: 110px 122px; transition: transform 950ms cubic-bezier(.2,.8,.2,1); animation: gptNeedleIdle 5.5s ease-in-out 1.1s infinite; }
+.gpt-gauge-hub { fill: var(--card-accent); stroke: var(--text); stroke-width: 2; animation: gptHubBreath 2.7s ease-in-out infinite; }
+.gpt-gauge-value { position: absolute; right: 0; bottom: 19px; left: 0; display: flex; align-items: center; flex-direction: column; pointer-events: none; }
+.gpt-gauge-value strong { color: var(--card-accent); font-size: 30px; letter-spacing: -.06em; line-height: 1; }
+.gpt-gauge-value span { margin-top: 4px; color: var(--text-muted); font-family: var(--font-mono); font-size: 9px; letter-spacing: .08em; }
+
+@keyframes gptSweep { to { transform: rotate(360deg); } }
+@keyframes gptNeedleIdle { 0%, 100% { filter: drop-shadow(0 0 0 transparent); } 50% { filter: drop-shadow(0 0 4px color-mix(in srgb, var(--card-accent) 65%, transparent)); } }
+@keyframes gptHubBreath { 0%, 100% { filter: drop-shadow(0 0 2px var(--card-accent)); } 50% { filter: drop-shadow(0 0 9px var(--card-accent)); } }
+@keyframes gptPointPulse { 0%, 100% { opacity: .22; transform: scale(.78); } 50% { opacity: .76; transform: scale(1.45); } }

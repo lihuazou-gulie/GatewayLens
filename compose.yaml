@@ -1,0 +1,44 @@
+name: sub2api-monitor
+services:
+  runtime-command-center:
+    build:
+      context: .
+      args:
+        NODE_IMAGE: ${KANBAN_NODE_IMAGE:-node:22-alpine}
+        SOURCE_REVISION: ${KANBAN_REVISION:-unknown}
+    image: ${KANBAN_IMAGE:-sub2api-monitor:local}
+    restart: unless-stopped
+    ports:
+      - "${KANBAN_BIND_ADDRESS:-127.0.0.1}:${KANBAN_PUBLISH_PORT:-8787}:8787"
+    environment:
+      KANBAN_HOST: 0.0.0.0
+      KANBAN_PORT: 8787
+      KANBAN_DATA_DIR: /data
+      KANBAN_PUBLIC_ORIGIN: ${KANBAN_PUBLIC_ORIGIN:-}
+      KANBAN_ALLOW_HTTP: ${KANBAN_ALLOW_HTTP:-false}
+      KANBAN_CACHE_MS: ${KANBAN_CACHE_MS:-30000}
+    volumes:
+      - kanban-data:/data
+    cpus: "0.50"
+    mem_limit: 384m
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "node", "server/healthcheck.mjs"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+volumes:
+  kanban-data:

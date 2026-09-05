@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sub2API 监控</title><link rel="icon" href="data:,">
+<link rel="stylesheet" href="/styles/tokens.css"><link rel="stylesheet" href="/styles/base.css"><link rel="stylesheet" href="/styles/gauge.css"><link rel="stylesheet" href="/styles/monitor.css">
+<script type="module" src="/src/app.js"></script></head>
+<body><div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="particle-field" aria-hidden="true"></div>
+<div class="app-shell">
+<header class="topbar"><a class="brand" href="/"><span class="brand-mark"><span></span><span></span><span></span></span><span class="brand-copy"><strong id="site-name">SUB2API</strong><small>MONITORING / COMMAND CENTER</small></span></a>
+<nav class="view-nav" aria-label="监控视图"><a href="/" data-view="overview">总览</a><a href="/groups" data-view="groups">分组</a><a href="/models" data-view="models">模型专题</a></nav>
+<div class="topbar-actions"><a href="/settings" class="settings-link">面板设置 ↗</a></div></header>
+<main><section class="page-heading"><div><p class="eyebrow" id="view-eyebrow">LIVE / OVERVIEW</p><h1 id="view-title">运行态势，一屏掌握</h1><p class="lead" id="view-description">关注服务质量、分组负载与模型表现。</p></div>
+<div class="sync-card"><span class="status-dot" id="status-dot"></span><div><strong id="connection-status">正在连接</strong><small id="updated-at">等待首个数据快照</small></div><button id="refresh-button" class="button subtle" type="button">刷新</button></div></section>
+<section class="toolbar" aria-label="数据筛选"><div class="field-inline"><label for="scope-select">监控范围</label><select id="scope-select"><option value="all">全部已选分组</option></select></div>
+<div class="field-inline" id="topic-field" hidden><label for="topic-select">专题</label><select id="topic-select"><option value="">全部模型</option><option value="images">图片模型</option></select></div>
+<div class="field-inline" id="model-field" hidden><label for="model-select">模型</label><select id="model-select"><option value="">全部</option></select></div>
+<div class="range-switch" aria-label="时间范围"><button data-range="24h" type="button">24 小时</button><button data-range="7d" type="button">7 天</button><button data-range="30d" type="button">30 天</button></div></section>
+<div id="notice" class="notice" role="status" hidden></div>
+<div id="pool-health-alert" class="alert-banner" role="alert" hidden><span class="alert-orb"></span><div><strong>号池可用率低于设置阈值</strong><p id="pool-alert-copy"></p></div><a href="/groups">查看分组 →</a></div>
+<section class="metric-grid" id="metrics" aria-label="关键指标"></section>
+<section class="content-grid" id="overview-panels"><article class="panel trend-panel" id="traffic-panel"><header class="panel-header"><div><p class="eyebrow">TRAFFIC / HISTORY</p><h2>调用趋势</h2></div><span class="metric-tag">请求次数</span></header><svg id="trend-chart" class="trend-chart" viewBox="0 0 920 300" role="img" aria-label="请求量趋势图"></svg><p class="panel-note" id="trend-note"></p></article>
+<article class="panel" id="pool-panel"><header class="panel-header"><div><p class="eyebrow">RESOURCE / AVAILABILITY</p><h2>号池可用性</h2></div></header><div id="pool-content" class="panel-body"></div></article></section>
+<section class="section-heading" id="groups-heading"><div><p class="eyebrow">GROUPS / QUALITY & CAPACITY</p><h2>分组运行状态</h2></div><span id="group-count" class="metric-tag"></span></section><section id="group-grid" class="group-grid"></section>
+<section id="model-section" hidden><div class="section-heading"><div><p class="eyebrow">MODELS / OBSERVED PERFORMANCE</p><h2 id="models-title">模型表现</h2></div><span id="model-count" class="metric-tag"></span></div><p id="model-note" class="lead"></p><div id="model-grid" class="group-grid"></div></section>
+<section id="system-section" hidden><div class="section-heading"><div><p class="eyebrow">ADMIN / SYSTEM</p><h2>Sub2API 运行状态</h2></div><span class="metric-tag">仅管理员可见</span></div><div id="system-grid" class="system-grid"></div></section>
+</main><footer><span>SUB2API MONITOR · 聚合数据 · 只读采集</span><a href="/settings" class="settings-link">面板设置 ↗</a></footer></div></body></html>

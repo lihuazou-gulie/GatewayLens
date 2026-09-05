@@ -1,0 +1,22 @@
+services:
+  runtime-command-center:
+    environment:
+      KANBAN_ALLOW_HTTP: "true"
+      KANBAN_PUBLIC_ORIGIN: ""
+  sub2api-fixture:
+    depends_on:
+      runtime-command-center:
+        condition: service_healthy
+    build:
+      context: .
+      target: tested
+      args:
+        NODE_IMAGE: ${KANBAN_NODE_IMAGE:-node:22-alpine}
+    image: sub2api-monitor:acceptance-runner
+    command: ["node", "tests/fixtures/server.mjs"]
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    volumes:
+      - kanban-data:/monitor-data:ro

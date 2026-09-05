@@ -1,0 +1,8 @@
+services:
+  runtime-command-center:
+    environment:
+      KANBAN_PUBLIC_ORIGIN: ${KANBAN_PUBLIC_ORIGIN:?Set the external HTTPS origin}
+      KANBAN_TLS_CERT_FILE: /tls/fullchain.pem
+      KANBAN_TLS_KEY_FILE: /tls/privkey.pem
+    volumes:
+      - ${KANBAN_TLS_DIR:?Set the certificate directory}:/tls:ro

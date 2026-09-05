@@ -1,0 +1,38 @@
+:root {
+  --bg: #07100f;
+  --bg-soft: #0a1513;
+  --panel: rgba(13, 27, 24, 0.82);
+  --panel-strong: rgba(16, 33, 29, 0.96);
+  --panel-muted: rgba(20, 41, 36, 0.56);
+  --line: rgba(149, 194, 178, 0.14);
+  --line-strong: rgba(149, 194, 178, 0.26);
+  --text: #edf7f2;
+  --text-soft: #a8bbb3;
+  --text-muted: #728880;
+  --lime: #c7f36b;
+  --lime-strong: #a9e83e;
+  --mint: #65e6b4;
+  --cyan: #62dce7;
+  --amber: #f2c66d;
+  --rose: #ff7f87;
+  --slate: #82958e;
+  --shadow: 0 18px 70px rgba(0, 0, 0, 0.28);
+  --radius-xl: 24px;
+  --radius-lg: 18px;
+  --radius-md: 13px;
+  --content-width: 1580px;
+  --font-sans: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+@property --meter-value {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --gauge-value {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
