@@ -7,7 +7,7 @@ runtime.env
 secrets/
 *.tar.gz
 *.log
-data/
+/data/
 local-secrets/
 local-tls/
 *.zip
