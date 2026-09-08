@@ -1,15 +1,16 @@
 import { KanbanApi } from "../api/client.js";
-import { renderAuth, renderSettings, readDisplay } from "./render.js";
+import { renderAuth, renderSettings, readDisplay, readProbe } from "./render.js";
 import { statuses } from "../monitor/cards.js";
 const api = new KanbanApi(); let status; let settings;
 function message(text, error = false) { const box = document.getElementById("settings-message"); box.hidden = !text; box.textContent = text; box.classList.toggle("error", error); }
 async function loadSettings() {
   settings = await api.request("admin/settings");
-  renderSettings(settings, []);
+  renderSettings(settings, [], null);
   if (settings.connection) {
     document.getElementById("display-section").hidden = true;
     const catalog = await api.request("admin/catalog");
-    renderSettings(settings, catalog.groups);
+    const probe = await api.request("admin/probe");
+    renderSettings(settings, catalog.groups, probe);
   }
 }
 async function loadStatus() { status = await api.request("bootstrap"); renderAuth(status); if (status.authenticated) await loadSettings(); }
@@ -36,6 +37,14 @@ submit("display-form", async () => {
   await api.request("admin/display", { method: "PUT", body: { revision: settings.revision, display: readDisplay() } });
   await loadSettings(); message(settings.display.public ? "展示设置已保存，游客现在可以直接打开面板，无需登录。" : "展示设置已保存，当前仅登录后的管理员可查看。");
 });
+submit("probe-form", async () => {
+  await api.request("admin/probe", { method: "PUT", body: { revision: settings.revision, probe: readProbe(), apiKey: document.getElementById("probe-key").value } });
+  document.getElementById("probe-key").value = ""; await loadSettings(); message("主动探测设置已保存。");
+});
+document.getElementById("run-probe").addEventListener("click", (event) => void run(event.target, async () => {
+  const result = await api.request("admin/probe/run", { method: "POST", body: {} });
+  await loadSettings(); message(result.status === "ok" ? `探测成功 · ${result.latencyMs} ms` : `探测失败 · ${result.reason}`, result.status !== "ok");
+}));
 submit("password-form", async () => {
   await api.request("admin/password", { method: "POST", body: { currentPassword: document.getElementById("current-password").value, password: document.getElementById("new-password").value } });
   document.getElementById("password-form").reset(); await loadSettings(); message("管理密码已更新，其他登录会话已退出。");

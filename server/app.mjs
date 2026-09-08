@@ -4,12 +4,14 @@ import { Sessions } from "./auth.mjs";
 import { SettingsStore } from "./settings/store.mjs";
 import { handleSettings } from "./settings/routes.mjs";
 import { MonitoringService } from "./monitor/service.mjs";
+import { ProbeService } from "./probe/service.mjs";
 import { HttpError, UpstreamError } from "./errors.mjs";
 import { sendError, sendJson, serveStatic } from "./http.mjs";
 
 export async function createKanbanServer({ config, store: suppliedStore, clientFactory } = {}) {
   const store = suppliedStore || await new SettingsStore(config.dataDir).init();
   const sessions = new Sessions(); const monitor = new MonitoringService({ store, config, clientFactory });
+  const probe = new ProbeService({ store, config }); probe.start();
   const handler = async (request, response) => {
     try {
       const url = new URL(request.url || "/", "http://kanban.local");
@@ -20,7 +22,7 @@ export async function createKanbanServer({ config, store: suppliedStore, clientF
         sendJson(response, 200, payload, config); return;
       }
       if (url.pathname.startsWith("/api/")) {
-        const payload = await handleSettings({ request, response, url, store, sessions, monitor, config, clientFactory });
+        const payload = await handleSettings({ request, response, url, store, sessions, monitor, probe, config, clientFactory });
         sendJson(response, 200, payload, config); return;
       }
       if (request.method !== "GET") throw new HttpError(405, "页面只支持读取");
@@ -29,5 +31,6 @@ export async function createKanbanServer({ config, store: suppliedStore, clientF
   };
   const server = config.tls ? httpsServer(config.tls, handler) : httpServer(handler);
   server.requestTimeout = 45000; server.headersTimeout = 15000;
-  return { server, store, monitor, sessions };
+  server.on("close", () => probe.stop());
+  return { server, store, monitor, probe, sessions };
 }

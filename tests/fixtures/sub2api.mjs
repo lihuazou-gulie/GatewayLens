@@ -1,19 +1,25 @@
 import { createServer } from "node:http";
 export const DEMO_KEY = "demo-admin-key-not-production";
+export const DEMO_PROBE_KEY = "demo-probe-key-not-production";
 export const DEMO_GROUPS = [ { id: 101, name: "标准文本", platform: "openai" }, { id: 102, name: "优选文本", platform: "anthropic" }, { id: 103, name: "图片创作", platform: "openai" }, { id: 999, name: "不公开分组", platform: "openai" } ];
-export function fixtureSub2Api({ failures = new Map(), overrides = new Map(), calls = [], availability = true } = {}) {
-  return createServer((req, res) => {
-    const url = new URL(req.url, "http://fixture"); const path = url.pathname.replace("/api/v1", ""); const groupId = Number(url.searchParams.get("group_id") || 101);
+export function fixtureSub2Api({ failures = new Map(), overrides = new Map(), calls = [], availability = true, probeKey = DEMO_PROBE_KEY } = {}) {
+  return createServer(async (req, res) => {
+    const url = new URL(req.url, "http://fixture"); const path = url.pathname.replace("/api/v1", ""); const groupId = Number(url.searchParams.get("group_id") || 101); let data;
     calls.push({ path, method: req.method, groupId, query: url.searchParams });
     res.setHeader("Content-Type", "application/json");
-    if (req.headers["x-api-key"] !== DEMO_KEY) { res.writeHead(401); res.end(JSON.stringify({ code: 401 })); return; }
+    const probeAuthorized = path === "/v1/chat/completions" && req.headers.authorization === `Bearer ${probeKey}`;
+    if (req.headers["x-api-key"] !== DEMO_KEY && !probeAuthorized) { res.writeHead(401); res.end(JSON.stringify({ code: 401 })); return; }
+    if (path === "/v1/chat/completions") {
+      let body = ""; for await (const chunk of req) body += chunk;
+      const request = JSON.parse(body); data = { id: "probe", choices: [{ message: { content: request.max_tokens === 1 ? "OK" : "" } }] };
+      res.end(JSON.stringify(data)); return;
+    }
     if (failures.has(path)) { res.writeHead(failures.get(path)); res.end(JSON.stringify({ message: "private-upstream-error" })); return; }
     const accountIds = groupId === 101 ? [1, 2, 3] : groupId === 102 ? [2, 4] : [3, 5];
     const account = Object.fromEntries(accountIds.map((id) => [id, { account_id: id, account_name: "SENSITIVE_ACCOUNT", user_email: "SENSITIVE_EMAIL", api_key: "SENSITIVE_KEY", current_in_use: id === 5 ? 5 : 1, max_capacity: 8, waiting_in_queue: id === 5 ? 2 : 0,
       is_available: availability && id !== 4, is_rate_limited: id === 4, has_error: false } ]));
     const multiplier = groupId === 103 ? 0.1 : groupId === 102 ? 0.7 : 1;
     const now = Date.now();
-    let data;
     if (path === "/admin/groups/all") data = DEMO_GROUPS;
     else if (path === "/admin/ops/dashboard/overview") data = { request_count_total: 10200 * multiplier, request_count_sla: 10000 * multiplier, success_count: 9820 * multiplier, error_count_sla: 180 * multiplier, error_count_total: 380 * multiplier, business_limited_count: 200 * multiplier,
       upstream_429_count: 42, upstream_529_count: 5, duration: { p50_ms: groupId === 103 ? 38000 : 2200, p95_ms: groupId === 103 ? 92000 : 9400 }, ttft: { p50_ms: 1100 },

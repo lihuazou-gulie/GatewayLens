@@ -9,7 +9,7 @@ export function renderAuth(status) {
   setText("auth-description", status.initialized ? "输入面板的管理密码，维护连接与展示设置。" : "使用部署数据目录中的 setup-code 文件确认初始化权限，并设置面板自己的管理密码。");
   document.getElementById("admin-password").autocomplete = status.initialized ? "current-password" : "new-password";
 }
-export function renderSettings(settings, groups) {
+export function renderSettings(settings, groups, probe = null) {
   const d = settings.display;
   document.getElementById("site-url").value = settings.connection?.baseUrl || "";
   document.getElementById("site-key").value = "";
@@ -33,10 +33,36 @@ export function renderSettings(settings, groups) {
   document.getElementById("module-options").replaceChildren(...Object.entries(moduleLabels).map(([key, text]) => {
     const label = element("label", "checkbox-line"); const check = element("input"); check.type = "checkbox"; check.dataset.module = key; check.checked = d.modules[key]; label.append(check, element("span", "", text)); return label;
   }));
+  renderProbe(settings, groups, probe);
+}
+function renderProbe(settings, groups, probe) {
+  show("probe-section", Boolean(settings.connection));
+  if (!settings.connection) return;
+  const config = probe?.config || { enabled: false, intervalSeconds: 300, groupId: null, model: "", endpoint: "/v1/chat/completions" };
+  document.getElementById("probe-enabled").checked = config.enabled === true;
+  document.getElementById("probe-model").value = config.model || "";
+  document.getElementById("probe-endpoint").value = config.endpoint || "/v1/chat/completions";
+  document.getElementById("probe-interval").value = config.intervalSeconds || 300;
+  const options = [element("option", "", "请选择已展示分组")];
+  for (const selected of settings.display.groups) {
+    const catalogGroup = groups.find((group) => group.id === selected.id);
+    options.push(element("option", "", selected.label || catalogGroup?.name || String(selected.id)));
+    options.at(-1).value = String(selected.id);
+  }
+  const select = document.getElementById("probe-group"); select.replaceChildren(...options); select.value = config.groupId === null ? "" : String(config.groupId);
+  const latest = probe?.latest;
+  setText("probe-status", latest ? latest.status === "ok" ? "最近成功" : "最近失败" : config.configured ? "等待探测" : "尚未配置");
+  setText("probe-last-result", latest ? `${latest.status === "ok" ? "成功" : "失败"} · ${new Date(latest.checkedAt).toLocaleString()} · ${latest.latencyMs ?? "-"} ms${latest.status === "ok" ? "" : ` · ${latest.reason}`}` : "尚未产生探测结果。");
 }
 export function readDisplay() {
   return { title: document.getElementById("display-title").value, public: document.getElementById("public-display").checked,
     imageModels: document.getElementById("image-models").value.split("\n").map((v) => v.trim()).filter(Boolean), poolThreshold: Number(document.getElementById("pool-threshold").value),
     groups: [...document.querySelectorAll(".group-option")].filter((row) => row.querySelector("[data-group]").checked).map((row) => ({ id: Number(row.dataset.id), label: row.querySelector("[data-alias]").value })),
     modules: Object.fromEntries([...document.querySelectorAll("[data-module]")].map((c) => [c.dataset.module, c.checked])) };
+}
+export function readProbe() {
+  const group = document.getElementById("probe-group").value;
+  return { enabled: document.getElementById("probe-enabled").checked, groupId: group ? Number(group) : null,
+    model: document.getElementById("probe-model").value, endpoint: document.getElementById("probe-endpoint").value,
+    intervalSeconds: Number(document.getElementById("probe-interval").value) };
 }

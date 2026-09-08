@@ -1,0 +1,25 @@
+[Unit]
+Description=Sub2API Monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=runtime-dashboard
+Group=runtime-dashboard
+WorkingDirectory=/opt/runtime-command-center
+EnvironmentFile=/etc/runtime-command-center/runtime.env
+Environment=KANBAN_DATA_DIR=/var/lib/sub2api-monitor
+StateDirectory=sub2api-monitor
+UMask=0077
+ExecStart=/usr/bin/node /opt/runtime-command-center/server/index.mjs
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/sub2api-monitor
+
+[Install]
+WantedBy=multi-user.target

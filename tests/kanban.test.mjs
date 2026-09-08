@@ -8,7 +8,7 @@ import { createKanbanServer } from "../server/app.mjs";
 import { SettingsStore } from "../server/settings/store.mjs";
 import { TimedValueCache } from "../server/cache.mjs";
 import { normalizeSite, Sub2ApiClient } from "../server/upstream-client.mjs";
-import { fixtureSub2Api, listen, DEMO_KEY, DEMO_GROUPS } from "./fixtures/sub2api.mjs";
+import { fixtureSub2Api, listen, DEMO_KEY, DEMO_PROBE_KEY, DEMO_GROUPS } from "./fixtures/sub2api.mjs";
 import { qualitySummary, capacityUnion } from "../server/monitor/normalize.mjs";
 const PASSWORD = "local-test-password-2026";
 async function harness(t, fixtureOptions = {}) {
@@ -180,4 +180,33 @@ test("summary never averages group percentiles and zero capacity remains unknown
   const summary = qualitySummary([{ quality: { data: { requests: 0, successes: 0, latency: { p95: 10 } } } }]);
   assert.equal(summary.rate, null); assert.equal("latency" in summary, false);
   assert.equal(capacityUnion([{ account: {} }]).percent, null);
+});
+
+test("configured probes run through the gateway and remain admin-only", async (t) => {
+  const h = await harness(t); await h.setup(); await h.connect(); await h.display();
+  const settings = (await h.request("admin/settings")).data;
+  const probe = { enabled: false, intervalSeconds: 300, groupId: DEMO_GROUPS[0].id, model: "gpt-5.6", endpoint: "/v1/chat/completions" };
+  assert.equal((await h.request("admin/probe", { method: "PUT", body: { revision: settings.revision, probe, apiKey: DEMO_PROBE_KEY } })).status, 200);
+  const configured = (await h.request("admin/probe")).data;
+  assert.equal(configured.config.configured, true); assert.equal(configured.config.groupLabel, "标准文本"); assert.equal(configured.history.length, 0);
+  const run = await h.request("admin/probe/run", { method: "POST", body: {} });
+  assert.equal(run.status, 200); assert.equal(run.data.status, "ok"); assert.equal(run.data.reason, "ok");
+  const status = (await h.request("admin/probe")).data; assert.equal(status.latest.status, "ok"); assert.equal(status.latest.latencyMs >= 0, true);
+  assert.equal((await h.request("admin/probe", { auth: false })).status, 401);
+  const persisted = await readFile(join(h.dir, "settings.json"), "utf8"); assert.ok(!persisted.includes(DEMO_PROBE_KEY));
+});
+
+test("changing the source or displayed groups invalidates the active probe target", async (t) => {
+  const h = await harness(t); await h.setup(); await h.connect(); await h.display();
+  let settings = (await h.request("admin/settings")).data;
+  const probe = { enabled: true, intervalSeconds: 300, groupId: DEMO_GROUPS[0].id, model: "gpt-5.6", endpoint: "/v1/chat/completions" };
+  assert.equal((await h.request("admin/probe", { method: "PUT", body: { revision: settings.revision, probe, apiKey: DEMO_PROBE_KEY } })).status, 200);
+  settings = (await h.request("admin/settings")).data;
+  const reduced = { ...settings.display, groups: [settings.display.groups[1]] };
+  assert.equal((await h.request("admin/display", { method: "PUT", body: { revision: settings.revision, display: reduced } })).status, 200);
+  assert.equal(h.store.probe().config.enabled, false); assert.equal(h.store.probe().apiKey, "");
+  await h.display(); settings = (await h.request("admin/settings")).data;
+  const source = fixtureSub2Api(); const port = await listen(source); t.after(() => { source.closeAllConnections(); source.close(); });
+  assert.equal((await h.request("admin/connection", { body: { site: `http://127.0.0.1:${port}`, apiKey: DEMO_KEY, revision: settings.revision } })).status, 200);
+  assert.equal(h.store.probe().config.enabled, false); assert.equal(h.store.probe().apiKey, "");
 });

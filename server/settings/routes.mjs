@@ -3,7 +3,8 @@ import { HttpError, UpstreamError } from "../errors.mjs";
 import { Sub2ApiClient, normalizeSite } from "../upstream-client.mjs";
 import { catalog } from "../monitor/normalize.mjs";
 import { section } from "../monitor/service.mjs";
-import { DEFAULT_DISPLAY, validateDisplay } from "./schema.mjs";
+import { DEFAULT_DISPLAY, DEFAULT_PROBE, validateDisplay, validateProbe } from "./schema.mjs";
+import { ProbeService } from "../probe/service.mjs";
 
 export function assertSameOrigin(request, config) {
   let origin;
@@ -22,7 +23,7 @@ export async function readJson(request) {
   try { const value = JSON.parse(Buffer.concat(chunks).toString()); if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(); return value; }
   catch { throw new HttpError(400, "设置格式无效"); }
 }
-export async function handleSettings({ request, response, url, store, sessions, monitor, config, clientFactory = (c) => new Sub2ApiClient(c) }) {
+export async function handleSettings({ request, response, url, store, sessions, monitor, probe, config, clientFactory = (c) => new Sub2ApiClient(c) }) {
   const path = url.pathname; const method = request.method;
   const secure = Boolean(request.socket.encrypted || config.publicOrigin?.startsWith("https:"));
   if (method === "GET" && path === "/api/bootstrap") return { initialized: Boolean(store.state.admin), authenticated: sessions.authenticated(request) };
@@ -41,11 +42,34 @@ export async function handleSettings({ request, response, url, store, sessions, 
   if (method === "POST" && path === "/api/logout") { sessions.logout(request, response, secure); return { ok: true }; }
   if (method === "GET" && path === "/api/admin/settings") return { revision: store.revision, display: store.state.display,
     connection: store.state.connection ? { baseUrl: store.state.connection.baseUrl, configured: true } : null };
+  if (method === "GET" && path === "/api/admin/probe") return probe.status();
   if (method === "GET" && path === "/api/admin/catalog") return { groups: await monitor.catalog() };
   if (method === "PUT" && path === "/api/admin/display") {
     const body = await readJson(request); const display = validateDisplay(body.display, await monitor.catalog());
-    await store.update((s) => { if (body.revision !== store.revision) throw new HttpError(409, "设置已被更新，请重新载入"); return { ...s, display }; });
+    await store.update((s) => {
+      if (body.revision !== store.revision) throw new HttpError(409, "设置已被更新，请重新载入");
+      const targetStillSelected = s.probe?.config?.groupId === null || display.groups.some((group) => group.id === s.probe.config.groupId);
+      const nextProbe = targetStillSelected ? s.probe : { config: structuredClone(DEFAULT_PROBE), secret: null, generation: ProbeService.nextGeneration() };
+      return { ...s, display, probe: nextProbe };
+    });
     return { ok: true };
+  }
+  if (method === "PUT" && path === "/api/admin/probe") {
+    sessions.throttle(request);
+    const body = await readJson(request); const groups = await monitor.catalog();
+    const configValue = validateProbe(body.probe, groups, store.state.display.groups);
+    const current = store.probe();
+    const apiKey = typeof body.apiKey === "string" && body.apiKey.trim() ? body.apiKey.trim() : current.apiKey;
+    if (apiKey.length > 4096 || /[\r\n]/.test(apiKey)) throw new HttpError(400, "请输入有效的探测 API Key");
+    if (configValue.enabled && !apiKey) throw new HttpError(400, "启用主动探测前请输入探测 API Key");
+    await store.update((s) => {
+      if (body.revision !== store.revision) throw new HttpError(409, "设置已被更新，请重新载入");
+      return { ...s, probe: { config: configValue, secret: apiKey ? store.encrypt(apiKey) : null, generation: ProbeService.nextGeneration() } };
+    });
+    probe.sync(); return { ok: true };
+  }
+  if (method === "POST" && path === "/api/admin/probe/run") {
+    sessions.throttle(request); return await probe.runNow();
   }
   if (method === "POST" && ["/api/admin/connection/test", "/api/admin/connection"].includes(path)) {
     sessions.throttle(request);
@@ -67,7 +91,9 @@ export async function handleSettings({ request, response, url, store, sessions, 
     const secret = store.encrypt(apiKey);
     await store.update((s) => {
       if (body.revision !== store.revision) throw new HttpError(409, "设置已被更新，请重新载入");
-      return { ...s, connection: { baseUrl, secret }, display: s.connection?.baseUrl === baseUrl ? s.display : structuredClone(DEFAULT_DISPLAY) };
+      const sameSource = s.connection?.baseUrl === baseUrl;
+      return { ...s, connection: { baseUrl, secret }, display: sameSource ? s.display : structuredClone(DEFAULT_DISPLAY),
+        probe: sameSource ? s.probe : { config: structuredClone(DEFAULT_PROBE), secret: null, generation: ProbeService.nextGeneration() } };
     });
     return { ok: true, groupCount: groups.length };
   }

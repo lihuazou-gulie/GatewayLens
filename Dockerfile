@@ -18,7 +18,7 @@ FROM application AS runtime
 # The final image depends on the test stage, but contains no test fixtures.
 COPY --from=tested /app/server ./server
 ARG SOURCE_REVISION=unknown
-LABEL org.opencontainers.image.source="https://github.com/lihuazou-gulie/kanban" \
+LABEL org.opencontainers.image.source="https://github.com/lihuazou-gulie/GatewayLens" \
       org.opencontainers.image.revision="${SOURCE_REVISION}"
 RUN mkdir -p /data && chown node:node /data
 

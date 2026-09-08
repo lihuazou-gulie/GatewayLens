@@ -1,7 +1,8 @@
 import { mkdir, readFile, writeFile, rename, chmod } from "node:fs/promises";
 import { join } from "node:path";
 import { randomBytes, createCipheriv, createDecipheriv, createHmac } from "node:crypto";
-import { DEFAULT_DISPLAY } from "./schema.mjs";
+import { DEFAULT_DISPLAY, DEFAULT_PROBE } from "./schema.mjs";
+const SETTINGS_VERSION = 2;
 async function readOrCreate(path, bytes) {
   try { await writeFile(path, bytes, { flag: "wx", mode: 0o600 }); } catch (e) { if (e.code !== "EEXIST") throw e; }
   return readFile(path);
@@ -16,10 +17,15 @@ export class SettingsStore {
     this.setupCode = (await readOrCreate(join(this.dir, "setup-code"), randomBytes(24).toString("hex"))).toString().trim();
     try {
       this.state = JSON.parse(await readFile(join(this.dir, "settings.json"), "utf8"));
-      if (this.state.version !== 1) throw new Error("Unsupported settings version");
+      if (this.state.version === 1) {
+        this.state = { ...this.state, version: SETTINGS_VERSION, probe: { config: structuredClone(DEFAULT_PROBE), secret: null, generation: "initial" } };
+        await writeFile(join(this.dir, "settings.json"), JSON.stringify(this.state, null, 2), { mode: 0o600 });
+      } else if (this.state.version !== SETTINGS_VERSION) throw new Error("Unsupported settings version");
+      if (!this.state.probe || typeof this.state.probe !== "object") throw new Error("Invalid probe settings");
+      this.state.probe = { config: { ...structuredClone(DEFAULT_PROBE), ...(this.state.probe.config || {}) }, secret: this.state.probe.secret || null, generation: this.state.probe.generation || "initial" };
     } catch (e) {
       if (e.code !== "ENOENT") throw e;
-      this.state = { version: 1, admin: null, connection: null, display: structuredClone(DEFAULT_DISPLAY) };
+      this.state = { version: SETTINGS_VERSION, admin: null, connection: null, display: structuredClone(DEFAULT_DISPLAY), probe: { config: structuredClone(DEFAULT_PROBE), secret: null, generation: "initial" } };
     }
     return this;
   }
@@ -35,6 +41,10 @@ export class SettingsStore {
   }
   scopeId(id) { return createHmac("sha256", this.key).update(`group:${id}`).digest("hex").slice(0, 16); }
   connection() { const c = this.state.connection; return c ? { baseUrl: c.baseUrl, apiKey: this.decrypt(c.secret) } : null; }
+  probe() {
+    const p = this.state.probe;
+    return { config: structuredClone(p.config), apiKey: p.secret ? this.decrypt(p.secret) : "", generation: p.generation };
+  }
   update(mutator) {
     const operation = this.pending.then(async () => {
       const next = mutator(structuredClone(this.state));
