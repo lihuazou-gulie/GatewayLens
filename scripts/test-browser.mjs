@@ -1,39 +1,118 @@
-import { createServer } from "node:http";
-import { mkdtemp, readFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { chromium, expect } from "@playwright/test";
+import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { createKanbanServer } from "../server/app.mjs";
-import { loadConfig } from "../server/config.mjs";
-import { serveStatic, sendJson, sendError, securityHeaders } from "../server/http.mjs";
-import { fixtureSub2Api, listen, DEMO_KEY, DEMO_GROUPS } from "../tests/fixtures/sub2api.mjs";
+import { tmpdir } from "node:os";
+import { startRenderingHarness } from "./browser-harness.mjs";
+import { startDemo } from "./demo.mjs";
+import { verifyAdminJourney, verifyView } from "../tests/browser/admin-journey.mjs";
 
-// Local browser regression harness. This server and its test routes are never
-// part of the production app or image; all monitoring data is synthetic.
-const source = fixtureSub2Api(); const upstreamPort = await listen(source);
-const dir = await mkdtemp(join(tmpdir(), "kanban-browser-test-"));
-const config = loadConfig({ KANBAN_DATA_DIR: dir });
-const app = await createKanbanServer({ config });
-await app.store.update((state) => ({ ...state,
-  connection: { baseUrl: `http://127.0.0.1:${upstreamPort}/api/v1`, secret: app.store.encrypt(DEMO_KEY) },
-  display: { ...state.display, title: "增量渲染验收 · 模拟数据", groups: DEMO_GROUPS.slice(0, 3).map((g) => ({ id: g.id, label: g.name })) },
-}));
-const html = (await readFile(new URL("../index.html", import.meta.url), "utf8"))
-  .replace('src="/src/app.js"', 'src="/render.browser.js"')
-  .replace("<body>", '<body><pre id="render-test-result" role="status">正在进行增量渲染测试…</pre>');
-const testCode = await readFile(new URL("../tests/render.browser.js", import.meta.url));
-const server = createServer(async (request, response) => {
-  try {
-    const path = new URL(request.url, "http://localhost").pathname;
-    if (request.method !== "GET") { response.writeHead(405); response.end(); return; }
-    if (path === "/snapshot") { sendJson(response, 200, await app.monitor.snapshot({}, true), config); return; }
-    if (path === "/" || path === "/render.browser.js") {
-      response.writeHead(200, { ...securityHeaders(config), "Content-Type": path === "/" ? "text/html; charset=utf-8" : "text/javascript; charset=utf-8" });
-      response.end(path === "/" ? html : testCode); return;
+const outputDir =
+  process.env.BROWSER_ARTIFACT_DIR ||
+  (await mkdtemp(join(tmpdir(), "gatewaylens-browser-evidence-")));
+await mkdir(outputDir, { recursive: true });
+const harness = await startRenderingHarness(),
+  demo = await startDemo();
+let browser;
+const errors = [],
+  checks = [];
+try {
+  browser = await chromium.launch({
+    headless: true,
+    ...(process.env.BROWSER_EXECUTABLE ? { executablePath: process.env.BROWSER_EXECUTABLE } : {}),
+  });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto(harness.url);
+  await expect(page.locator("#render-test-result")).toContainText("PASS", { timeout: 30000 });
+  checks.push(await page.locator("#render-test-result").innerText());
+  await verifyAdminJourney(page, demo);
+  checks.push(
+    "Initialization, connection test/save, group selection/order, display save, synthetic probe",
+  );
+  for (const theme of ["default", "stardew"]) {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto(demo.dashboard + "/settings");
+    await expect(page.locator("#admin-section")).toBeVisible();
+    await page.locator('[data-theme-choice][value="' + theme + '"]').check();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    await page.screenshot({
+      path: join(outputDir, theme + "-settings.png"),
+      fullPage: true,
+      animations: "disabled",
+    });
+    for (const [name, path] of [
+      ["overview", "/"],
+      ["groups", "/groups"],
+      ["models", "/models?topic=images"],
+    ]) {
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await verifyView(page, demo.dashboard, path);
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+      await page.screenshot({
+        path: join(outputDir, theme + "-" + name + ".png"),
+        fullPage: true,
+        animations: "disabled",
+      });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await verifyView(page, demo.dashboard, path);
+      await page.screenshot({
+        path: join(outputDir, theme + "-" + name + "-mobile.png"),
+        fullPage: true,
+        animations: "disabled",
+      });
     }
-    await serveStatic(response, path, config);
-  } catch (error) { sendError(response, error, config); }
-});
-const port = await listen(server, Number(process.env.BROWSER_TEST_PORT || 8791));
-console.log(`Open http://127.0.0.1:${port}/ to run browser rendering regressions with synthetic data.`);
-function stop() { server.closeAllConnections(); source.closeAllConnections(); server.close(); source.close(); }
-process.on("SIGINT", stop); process.on("SIGTERM", stop);
+    await page.goto(demo.dashboard + "/settings");
+    await expect(page.locator("#admin-section")).toBeVisible();
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),
+    ).toBe(true);
+    await page.screenshot({
+      path: join(outputDir, theme + "-settings-mobile.png"),
+      fullPage: true,
+      animations: "disabled",
+    });
+    await page.locator("#logout").click();
+    await expect(page.locator("#auth-section")).toBeVisible();
+    await expect(page.locator("#auth-title")).toHaveText("登录管理后台");
+    await page.screenshot({
+      path: join(outputDir, theme + "-login-mobile.png"),
+      fullPage: true,
+      animations: "disabled",
+    });
+    expect(await page.locator("#admin-section").isHidden()).toBe(true);
+    await page.locator("#admin-password").fill("synthetic-browser-password");
+    await page.locator("#auth-submit").click();
+    await expect(page.locator("#admin-section")).toBeVisible();
+    checks.push(
+      theme +
+        ": desktop/mobile overview, groups, models, settings, mobile login, persisted preference",
+    );
+  }
+  const guest = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const guestPage = await guest.newPage();
+  await verifyView(guestPage, demo.dashboard, "/");
+  await expect(guestPage.locator("#system-section")).toBeHidden();
+  expect((await guest.request.get(demo.dashboard + "/api/admin/settings")).status()).toBe(401);
+  await page.goto(demo.dashboard + "/settings");
+  await page.locator("#logout").click();
+  await expect(page.locator("#auth-title")).toHaveText("登录管理后台");
+  await expect(page.locator("#admin-section")).toBeHidden();
+  checks.push("Guest visibility, admin API denial, logout");
+  expect(errors).toEqual([]);
+  await writeFile(
+    join(outputDir, "result.json"),
+    JSON.stringify({ passed: true, checks, pageErrors: errors }, null, 2),
+  );
+  console.log("Browser acceptance passed. Evidence: " + outputDir);
+} catch (error) {
+  await writeFile(
+    join(outputDir, "result.json"),
+    JSON.stringify({ passed: false, checks, pageErrors: errors, failure: error.message }, null, 2),
+  );
+  throw error;
+} finally {
+  await browser?.close();
+  await harness.close();
+  await demo.close();
+}

@@ -1,23 +1,106 @@
-.gpt-gauge-season-mark, .gpt-gauge-wood-needle { display: none; }
-:root[data-theme="stardew"] .gpt-gauge-track { stroke: #8c5129; stroke-width: 21px; stroke-linecap: butt; }
-:root[data-theme="stardew"] .gpt-gauge-progress { stroke: var(--card-accent); stroke-width: 14px; stroke-linecap: butt; stroke-dasharray: none; filter: none; }
-:root[data-theme="stardew"] :is(.gpt-gauge-sweep, .gpt-gauge-point-glow, .gpt-gauge-point, .gpt-gauge-needle, .gpt-gauge-hub) { display: none; }
-:root[data-theme="stardew"] .gpt-gauge-tick { stroke: #443517; stroke-width: 1px; stroke-linecap: square; opacity: .62; filter: none; }
-:root[data-theme="stardew"] .gpt-gauge-tick.is-major { stroke: #3e2b14; stroke-width: 1.5px; opacity: .9; filter: none; }
-:root[data-theme="stardew"] .gpt-gauge-scale-label { fill: #452711; font-size: 10px; font-weight: 800; letter-spacing: 0; }
-:root[data-theme="stardew"] .gpt-gauge-scale-label[data-scale-value="0"] { transform: translate(-14px, 10px); }
-:root[data-theme="stardew"] .gpt-gauge-scale-label[data-scale-value="100"] { transform: translate(14px, 10px); }
-:root[data-theme="stardew"] .gpt-gauge-wood-needle { display: block; fill: #d89c49; stroke: #54260f; stroke-width: 2; stroke-linejoin: bevel; transform: rotate(var(--gauge-angle, -90deg)); transform-origin: 110px 122px; transition: transform 950ms cubic-bezier(.2,.8,.2,1); }
-:root[data-theme="stardew"] .trend-chart { width: 100%; min-height: 215px; margin: 0; padding: 8px 0 0; border: 0; background: none; }
-:root[data-theme="stardew"] .chart-grid-line { stroke: #cfa163; stroke-width: 1px; stroke-dasharray: 5 4; }
-:root[data-theme="stardew"] .chart-axis-label { fill: #724819; font-size: 14px; font-weight: 700; }
-:root[data-theme="stardew"] .chart-bar { stroke: #286440; stroke-width: .65; }
-:root[data-theme="stardew"] .chart-line { stroke: #39762f; fill: none; }
-:root[data-theme="stardew"] .chart-dot { fill: #39762f; }
+.gpt-gauge-season-mark,
+.gpt-gauge-wood-needle {
+  display: none;
+}
+:root[data-theme="stardew"] .gpt-gauge-track {
+  stroke: #8c5129;
+  stroke-width: 21px;
+  stroke-linecap: butt;
+}
+:root[data-theme="stardew"] .gpt-gauge-progress {
+  stroke: var(--card-accent);
+  stroke-width: 14px;
+  stroke-linecap: butt;
+  stroke-dasharray: none;
+  filter: none;
+}
+:root[data-theme="stardew"]
+  :is(
+    .gpt-gauge-sweep,
+    .gpt-gauge-point-glow,
+    .gpt-gauge-point,
+    .gpt-gauge-needle,
+    .gpt-gauge-hub
+  ) {
+  display: none;
+}
+:root[data-theme="stardew"] .gpt-gauge-tick {
+  stroke: #443517;
+  stroke-width: 1px;
+  stroke-linecap: square;
+  opacity: 0.62;
+  filter: none;
+}
+:root[data-theme="stardew"] .gpt-gauge-tick.is-major {
+  stroke: #3e2b14;
+  stroke-width: 1.5px;
+  opacity: 0.9;
+  filter: none;
+}
+:root[data-theme="stardew"] .gpt-gauge-scale-label {
+  fill: #452711;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+:root[data-theme="stardew"] .gpt-gauge-scale-label[data-scale-value="0"] {
+  transform: translate(-14px, 10px);
+}
+:root[data-theme="stardew"] .gpt-gauge-scale-label[data-scale-value="100"] {
+  transform: translate(14px, 10px);
+}
+:root[data-theme="stardew"] .gpt-gauge-wood-needle {
+  display: block;
+  fill: #d89c49;
+  stroke: #54260f;
+  stroke-width: 2;
+  stroke-linejoin: bevel;
+  transform: rotate(var(--gauge-angle, -90deg));
+  transform-origin: 110px 122px;
+  transition: transform 950ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:root[data-theme="stardew"] .trend-chart {
+  width: 100%;
+  min-height: 215px;
+  margin: 0;
+  padding: 8px 0 0;
+  border: 0;
+  background: none;
+}
+:root[data-theme="stardew"] .chart-grid-line {
+  stroke: #cfa163;
+  stroke-width: 1px;
+  stroke-dasharray: 5 4;
+}
+:root[data-theme="stardew"] .chart-axis-label {
+  fill: #724819;
+  font-size: 14px;
+  font-weight: 700;
+}
+:root[data-theme="stardew"] .chart-bar {
+  stroke: #286440;
+  stroke-width: 0.65;
+}
+:root[data-theme="stardew"] .chart-line {
+  stroke: #39762f;
+  fill: none;
+}
+:root[data-theme="stardew"] .chart-dot {
+  fill: #39762f;
+}
 @media (max-width: 720px) {
-  :root[data-theme="stardew"] .chart-viewport { max-width: 100%; overflow-x: auto; scrollbar-color: #9b662d #f5d294; }
-  :root[data-theme="stardew"] .trend-chart { width: 720px; min-height: 235px; }
+  :root[data-theme="stardew"] .chart-viewport {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-color: #9b662d #f5d294;
+  }
+  :root[data-theme="stardew"] .trend-chart {
+    width: 720px;
+    min-height: 235px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  :root[data-theme="stardew"] .gpt-gauge-wood-needle { transition: none; }
+  :root[data-theme="stardew"] .gpt-gauge-wood-needle {
+    transition: none;
+  }
 }

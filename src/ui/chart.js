@@ -28,7 +28,9 @@ function bucketKey(bucket, index, range) {
 function setEntering(element, delay = 0) {
   element.style.animationDelay = `${delay}ms`;
   element.classList.add("is-entering");
-  element.addEventListener("animationend", () => element.classList.remove("is-entering"), { once: true });
+  element.addEventListener("animationend", () => element.classList.remove("is-entering"), {
+    once: true,
+  });
 }
 
 function restartEntering(element, delay = 0) {
@@ -42,16 +44,34 @@ function createChartState(svg) {
   while (svg.firstChild) svg.removeChild(svg.firstChild);
 
   const defs = node("defs");
-  const gradient = node("linearGradient", { id: "bar-gradient", x1: "0", y1: "0", x2: "0", y2: "1" });
+  const gradient = node("linearGradient", {
+    id: "bar-gradient",
+    x1: "0",
+    y1: "0",
+    x2: "0",
+    y2: "1",
+  });
   const theme = currentTheme();
-  const start = node("stop", { offset: "0%", "stop-color": theme.chart.gradientStart, "stop-opacity": theme.chart.opacityStart, "data-theme-stop": "start" });
-  const end = node("stop", { offset: "100%", "stop-color": theme.chart.gradientEnd, "stop-opacity": theme.chart.opacityEnd, "data-theme-stop": "end" });
+  const start = node("stop", {
+    offset: "0%",
+    "stop-color": theme.chart.gradientStart,
+    "stop-opacity": theme.chart.opacityStart,
+    "data-theme-stop": "start",
+  });
+  const end = node("stop", {
+    offset: "100%",
+    "stop-color": theme.chart.gradientEnd,
+    "stop-opacity": theme.chart.opacityEnd,
+    "data-theme-stop": "end",
+  });
   gradient.append(start, end);
   defs.append(gradient);
   svg.append(defs);
 
   const grid = node("g", { "data-layer": "grid" });
-  const gridLabels = GRID_STEPS.map(() => node("text", { class: "chart-axis-label", "text-anchor": "end" }));
+  const gridLabels = GRID_STEPS.map(() =>
+    node("text", { class: "chart-axis-label", "text-anchor": "end" }),
+  );
   GRID_STEPS.forEach((step, index) => {
     grid.append(node("line", { class: "chart-grid-line", "data-grid-step": step }));
     grid.append(gridLabels[index]);
@@ -162,16 +182,24 @@ export function drawTrendChart(svg, buckets, range) {
     setAttribute(entry.rect, "width", barWidth);
     setAttribute(entry.rect, "height", Math.max(2, barHeight));
     setAttribute(entry.rect, "opacity", total ? 0.86 : 0.22);
-    writeText(entry.title, `${rangeLabel(bucket.started_at, range)} · ${compactNumber(total)} 请求${bucket.success_rate == null ? "" : ` · ${percent(bucket.success_rate)}`}`);
+    writeText(
+      entry.title,
+      `${rangeLabel(bucket.started_at, range)} · ${compactNumber(total)} 请求${bucket.success_rate == null ? "" : ` · ${percent(bucket.success_rate)}`}`,
+    );
 
     const rate = bucket.success_rate == null ? null : Number(bucket.success_rate);
-    const point = rate !== null && Number.isFinite(rate) ? { key, x, y: MARGIN.top + plotHeight - (rate / 100) * plotHeight } : null;
+    const point =
+      rate !== null && Number.isFinite(rate)
+        ? { key, x, y: MARGIN.top + plotHeight - (rate / 100) * plotHeight }
+        : null;
     points.push(point);
 
-    const shouldLabel = index === 0 || index === safeBuckets.length - 1 || index % visibleLabelStep === 0;
+    const shouldLabel =
+      index === 0 || index === safeBuckets.length - 1 || index % visibleLabelStep === 0;
     const oldLabel = state.labels.get(key);
     if (shouldLabel) {
-      const label = oldLabel || node("text", { class: "chart-axis-label", "text-anchor": "middle" });
+      const label =
+        oldLabel || node("text", { class: "chart-axis-label", "text-anchor": "middle" });
       setAttribute(label, "x", x);
       setAttribute(label, "y", CHART_HEIGHT - 12);
       writeText(label, rangeLabel(bucket.started_at, range));
@@ -182,7 +210,11 @@ export function drawTrendChart(svg, buckets, range) {
       state.labels.delete(key);
     }
 
-    if (!point) { state.dots.get(key)?.remove(); state.dots.delete(key); return; }
+    if (!point) {
+      state.dots.get(key)?.remove();
+      state.dots.delete(key);
+      return;
+    }
     let dot = state.dots.get(key);
     if (!dot) {
       dot = node("circle", { class: "chart-dot", r: 2.8 });
@@ -201,7 +233,21 @@ export function drawTrendChart(svg, buckets, range) {
   removeStale(state.dots, activeKeys);
 
   let connected = false;
-  setAttribute(state.line, "d", points.map((point) => { if (!point) { connected = false; return ""; } const command = connected ? "L" : "M"; connected = true; return `${command} ${point.x} ${point.y}`; }).join(" "));
+  setAttribute(
+    state.line,
+    "d",
+    points
+      .map((point) => {
+        if (!point) {
+          connected = false;
+          return "";
+        }
+        const command = connected ? "L" : "M";
+        connected = true;
+        return `${command} ${point.x} ${point.y}`;
+      })
+      .join(" "),
+  );
   if (!state.initialized) {
     setEntering(state.line, 160);
   } else if (rangeChanged) {
@@ -219,8 +265,14 @@ document.addEventListener("kanban-theme-change", () => {
     if (!state) return;
     const start = state.gradient.querySelector('[data-theme-stop="start"]');
     const end = state.gradient.querySelector('[data-theme-stop="end"]');
-    if (start) { setAttribute(start, "stop-color", theme.chart.gradientStart); setAttribute(start, "stop-opacity", theme.chart.opacityStart); }
-    if (end) { setAttribute(end, "stop-color", theme.chart.gradientEnd); setAttribute(end, "stop-opacity", theme.chart.opacityEnd); }
+    if (start) {
+      setAttribute(start, "stop-color", theme.chart.gradientStart);
+      setAttribute(start, "stop-opacity", theme.chart.opacityStart);
+    }
+    if (end) {
+      setAttribute(end, "stop-color", theme.chart.gradientEnd);
+      setAttribute(end, "stop-opacity", theme.chart.opacityEnd);
+    }
     state.bars.forEach(({ rect }) => setAttribute(rect, "rx", theme.chart.radius));
   });
 });

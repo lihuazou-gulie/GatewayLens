@@ -1,12 +1,32 @@
 {
-  "name": "sub2api-monitor",
-  "version": "0.2.0",
+  "name": "gatewaylens",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "node server/index.mjs",
     "demo": "node scripts/demo.mjs",
     "test": "node --test tests/*.test.mjs",
-    "test:browser": "node scripts/test-browser.mjs"
+    "test:browser": "node scripts/test-browser.mjs",
+    "browser:serve": "node scripts/browser-harness.mjs",
+    "check:architecture": "node scripts/check-architecture.mjs",
+    "check:security": "node scripts/check-security.mjs",
+    "check:history": "node scripts/check-security.mjs --history",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run check:architecture && npm run check:security && npm test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "prettier": "3.9.6"
+  },
+  "description": "A self-hosted Sub2API monitoring dashboard",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lihuazou-gulie/GatewayLens.git"
   }
 }

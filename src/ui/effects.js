@@ -10,7 +10,10 @@ function renderParticles(field, effects) {
     particle.style.setProperty("--particle-color", palette[index % palette.length]);
     particle.style.setProperty("--particle-duration", `${8 + (index % 6) * 1.8}s`);
     particle.style.setProperty("--particle-delay", `${-(index % 8) * 1.4}s`);
-    particle.style.setProperty("--particle-drift", `${(index % 2 ? 1 : -1) * (12 + (index % 5) * 8)}px`);
+    particle.style.setProperty(
+      "--particle-drift",
+      `${(index % 2 ? 1 : -1) * (12 + (index % 5) * 8)}px`,
+    );
     particle.style.left = `${4 + ((index * 37) % 92)}%`;
     particle.style.top = `${10 + ((index * 53) % 82)}%`;
     field.appendChild(particle);
@@ -21,7 +24,9 @@ export function initAmbientEffects() {
   const field = document.querySelector(".particle-field");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const paint = () => { if (field && !reduceMotion) renderParticles(field, currentTheme().effects); };
+  const paint = () => {
+    if (field && !reduceMotion) renderParticles(field, currentTheme().effects);
+  };
   paint();
   document.addEventListener("kanban-theme-change", paint);
 
@@ -81,7 +86,9 @@ export function animateNumber(element, target, formatter, { durationMs = 900, de
     const eased = 1 - Math.pow(1 - progress, 3);
     const current = previous + (value - previous) * eased;
     element._motionValue = current;
-    element.textContent = formatter(decimals ? Number(current.toFixed(decimals)) : Math.round(current));
+    element.textContent = formatter(
+      decimals ? Number(current.toFixed(decimals)) : Math.round(current),
+    );
     if (progress < 1) element._motionFrame = requestAnimationFrame(step);
     else element._motionFrame = null;
   };

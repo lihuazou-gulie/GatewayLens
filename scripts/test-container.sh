@@ -25,7 +25,7 @@ docker run --rm -i --network none --read-only --user 1000:1000 --cap-drop ALL \
   --mount "type=volume,source=$restore_volume,target=/data" --entrypoint tar "$KANBAN_IMAGE" -C /data -xzf - < "$backup/data.tar.gz"
 docker run --rm --network none --read-only --user 1000:1000 --cap-drop ALL \
   --mount "type=volume,source=$restore_volume,target=/data" --entrypoint node "$KANBAN_IMAGE" --input-type=module -e \
-  'import {SettingsStore} from "./server/settings/store.mjs"; const s=await new SettingsStore("/data").init(); if(s.connection().apiKey!=="demo-admin-key-not-production")process.exit(1); console.log("Private volume restore and decryption passed");'
+  'import {openPersistence} from "./server/bootstrap/persistence.mjs"; import {ConfigurationRepository} from "./server/modules/configuration/infrastructure/configuration-repository.mjs"; const {store,vault}=await openPersistence("/data"); const s=new ConfigurationRepository(store,vault); if(s.snapshot().connection.apiKey!=="demo-admin-key-not-production")process.exit(1); console.log("Private volume restore and decryption passed");'
 fault="$KANBAN_BACKUP_DIR/fault.yaml"
 cat > "$fault" <<'YAML'
 services:

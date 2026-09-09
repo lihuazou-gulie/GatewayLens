@@ -1,36 +1,75 @@
 import { createServer as httpServer } from "node:http";
 import { createServer as httpsServer } from "node:https";
-import { Sessions } from "./auth.mjs";
-import { SettingsStore } from "./settings/store.mjs";
-import { handleSettings } from "./settings/routes.mjs";
-import { MonitoringService } from "./monitor/service.mjs";
-import { ProbeService } from "./probe/service.mjs";
-import { HttpError, UpstreamError } from "./errors.mjs";
-import { sendError, sendJson, serveStatic } from "./http.mjs";
+import { createApplication } from "./bootstrap/application.mjs";
+import { createRouter, route } from "./shared/interfaces/http/router.mjs";
+import { HttpError, publicError } from "./shared/interfaces/http/errors.mjs";
+import { sendError, sendJson, serveStatic } from "./shared/interfaces/http/response.mjs";
+import { TaskGate } from "./shared/infrastructure/concurrency/task-gate.mjs";
+import { identityRoutes } from "./modules/identity/interfaces/http/routes.mjs";
+import { readSessionToken } from "./modules/identity/interfaces/http/cookies.mjs";
+import { configurationRoutes } from "./modules/configuration/interfaces/http/routes.mjs";
+import { monitoringRoutes } from "./modules/monitoring/interfaces/http/routes.mjs";
+import { probeRoutes } from "./modules/probing/interfaces/http/routes.mjs";
 
-export async function createKanbanServer({ config, store: suppliedStore, clientFactory } = {}) {
-  const store = suppliedStore || await new SettingsStore(config.dataDir).init();
-  const sessions = new Sessions(); const monitor = new MonitoringService({ store, config, clientFactory });
-  const probe = new ProbeService({ store, config }); probe.start();
+export async function createGatewayLensServer({
+  config,
+  clientFactory,
+  probeClientFactory,
+  logger = console.error,
+} = {}) {
+  const report = (error) =>
+    logger(
+      JSON.stringify({
+        event: "operation_failed",
+        category: error.name === "DomainError" ? error.code : "internal",
+      }),
+    );
+  const app = await createApplication({
+    config,
+    clientFactory,
+    probeClientFactory,
+    onError: report,
+  });
+  const router = createRouter(
+    [
+      route("GET", "/api/health", () => ({ ok: true }), { auth: false }),
+      ...identityRoutes(app),
+      ...configurationRoutes(app.configuration),
+      ...monitoringRoutes({
+        monitor: app.monitor,
+        admission: new TaskGate({ concurrency: 64, maxQueued: 0 }),
+      }),
+      ...probeRoutes({ configure: app.configureProbe, probe: app.probe }),
+    ],
+    { config, limiter: app.limiter },
+  );
   const handler = async (request, response) => {
     try {
-      const url = new URL(request.url || "/", "http://kanban.local");
-      if (request.method === "GET" && url.pathname === "/api/health") { sendJson(response, 200, { ok: true }, config); return; }
-      if (url.pathname === "/api/monitor") {
-        if (request.method !== "GET") throw new HttpError(405, "监控接口只支持读取");
-        const payload = await monitor.snapshot(Object.fromEntries(["range", "scope", "model", "topic"].map((k) => [k, url.searchParams.get(k) || undefined])), sessions.authenticated(request));
-        sendJson(response, 200, payload, config); return;
-      }
+      const url = new URL(request.url || "/", "http://gatewaylens.local");
       if (url.pathname.startsWith("/api/")) {
-        const payload = await handleSettings({ request, response, url, store, sessions, monitor, probe, config, clientFactory });
-        sendJson(response, 200, payload, config); return;
+        const token = readSessionToken(request);
+        const result = await router({
+          request,
+          response,
+          url,
+          token,
+          authenticated: app.sessions.authenticated(token),
+          secure: Boolean(request.socket.encrypted || config.publicOrigin?.startsWith("https:")),
+        });
+        if (!response.destroyed) sendJson(response, 200, result, config);
+      } else {
+        if (request.method !== "GET") throw new HttpError(405, "页面只支持读取");
+        await serveStatic(response, url.pathname, config);
       }
-      if (request.method !== "GET") throw new HttpError(405, "页面只支持读取");
-      await serveStatic(response, url.pathname, config);
-    } catch (e) { sendError(response, e instanceof UpstreamError ? new HttpError(502, "数据源暂时不可用") : e, config); }
+    } catch (error) {
+      if (publicError(error).status >= 500) report(error);
+      if (!response.destroyed) sendError(response, error, config);
+    }
   };
   const server = config.tls ? httpsServer(config.tls, handler) : httpServer(handler);
-  server.requestTimeout = 45000; server.headersTimeout = 15000;
-  server.on("close", () => probe.stop());
-  return { server, store, monitor, probe, sessions };
+  server.requestTimeout = 45000;
+  server.headersTimeout = 15000;
+  server.on("close", () => app.dispose());
+  app.scheduler.start();
+  return { server, ...app };
 }

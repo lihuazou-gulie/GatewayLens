@@ -1,0 +1,6 @@
+node_modules/
+assets/
+outputs/
+test-results/
+playwright-report/
+package-lock.json

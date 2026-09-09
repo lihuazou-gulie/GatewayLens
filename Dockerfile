@@ -2,7 +2,7 @@ ARG NODE_IMAGE=node:22-alpine
 FROM ${NODE_IMAGE} AS application
 
 WORKDIR /app
-COPY package.json ./
+COPY package.json LICENSE ./
 COPY index.html ./
 COPY settings ./settings
 COPY src ./src
@@ -20,7 +20,9 @@ FROM application AS runtime
 COPY --from=tested /app/server ./server
 ARG SOURCE_REVISION=unknown
 LABEL org.opencontainers.image.source="https://github.com/lihuazou-gulie/GatewayLens" \
-      org.opencontainers.image.revision="${SOURCE_REVISION}"
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.title="GatewayLens"
 RUN mkdir -p /data && chown node:node /data
 
 ENV NODE_ENV=production

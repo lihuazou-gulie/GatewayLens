@@ -8,13 +8,19 @@ export function createKeyedList(container, keyOf, create) {
       if (new Set(keys).size !== keys.length) throw new Error("Duplicate list key");
       const active = new Set(keys);
       for (const [key, component] of entries) {
-        if (!active.has(key)) { component.node.remove(); entries.delete(key); }
+        if (!active.has(key)) {
+          component.node.remove();
+          entries.delete(key);
+        }
       }
       let cursor = container.firstChild;
       items.forEach((item, index) => {
         const key = keys[index];
         let component = entries.get(key);
-        if (!component) { component = create(item); entries.set(key, component); }
+        if (!component) {
+          component = create(item);
+          entries.set(key, component);
+        }
         component.update(item);
         if (component.node !== cursor) container.insertBefore(component.node, cursor);
         cursor = component.node.nextSibling;

@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "statements": {
+    "maintainer-image2-manual": {
+      "reportedBy": "GatewayLens maintainer",
+      "recordedOn": "2026-09-09",
+      "generationTool": "Image2",
+      "postProcessing": "Manual refinement including Photoshop, as reported by the maintainer",
+      "evidence": "Maintainer statement; full generation and edit history is not included"
+    }
+  },
+  "files": [
+    {
+      "path": "stardew-user/barrel.png",
+      "sha256": "2cf9ab956ffe701950bdac0fb24569f8ccceccbd288c1710e1350cf5f2ed3058",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/berries.png",
+      "sha256": "202cd4fe217855911accbfa41c610485e7cb06b8ce55fafa7b469328ec02be6d",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/bridge.png",
+      "sha256": "c928bd73899ecfd657a34880de98139ad8a2afbf8222c3bbe93e7003299c2f24",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/campfire.png",
+      "sha256": "e85d910fd09a978c0cde0d4144596fedf1bb34626086b14916355b37ec8b35a2",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/cat.png",
+      "sha256": "36b4bbd6acb99de67e4cbc6d1068e209d4c2b56ea5a9156093064293371c8b4c",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/cave.png",
+      "sha256": "efcff0f7362c027606a155e41d27a3e3c1e362132737bc1c36c89f2a176c78ff",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/chicken.png",
+      "sha256": "5d055bff98b680d3568394e958f1ea0d64e2da0251c8c162fc87f4dc904ebaa5",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/coins.png",
+      "sha256": "dc4f9a510ceb9cafaf312aa775fa0bed0978bae040e5d5ab3d32fc528303163c",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/cow.png",
+      "sha256": "3464366b26ce3e4f00879afca0c7904d4adbe351d1f124c0ca951f578005b7df",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/crate.png",
+      "sha256": "5149fea8685341441df703c76a53dff479bdae6a65308099b8926bfc6242bbe5",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/dog.png",
+      "sha256": "353b81a6f4f3e510fcf8cfeead2e7205d726eff7f9b1c198efc34b6874676754",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/duck.png",
+      "sha256": "ac1594e744fcd03583b85904e273a088c190b57b586688faa5031a476186f57e",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/fence.png",
+      "sha256": "003bec5beb4d7b5d0b795d35695ac5d0204ae977b6a50536a05a02a3be649252",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/flowers.png",
+      "sha256": "a910ff7243be7be3956497b6dca667ea5d17e066196e6741382c8f3f31c21e41",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/grass.png",
+      "sha256": "701f538d81653552d5e517122520c91767bf8b18590cfa15e5f25825d4a071c5",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/mushrooms.png",
+      "sha256": "ab10cbb7faa8a80d85f75260abcfcd4ae0c31fcf717a1fde817bf4273e4d8c67",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/pond.png",
+      "sha256": "5fcb8de8144e632f6e6b10d9d0a0f3b611355c64d896c067bb83ca576c9f3c0c",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/rocks.png",
+      "sha256": "08a288ab1e5ce9c7a9eaee065d4dd0f72789d09597e2d20ca4e798a6e3ec0eaf",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/sheep.png",
+      "sha256": "d9337ed1adccba90c78b72fe1259e57ebba736683e62361b5f5eb12f1e57c984",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/sign.png",
+      "sha256": "b62db89fc7be55492e50ba0f41e3a89ad97c70afe382ee18f5ed40cae799df11",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/soil.png",
+      "sha256": "eaf9e6f0fb1d0981f96a9e44e2e1b84ce64d18413886ed1bf877769d295a45e2",
+      "width": 1481,
+      "height": 904,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/stump.png",
+      "sha256": "d99ad8df979f4b098b7df2268aefbb7e15ccea432dd26e2f62e839d2264399fd",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-user/tree.png",
+      "sha256": "ce2506555f02322daa20dda42e4fa4c4b7eb4eaace4003ed475ea4854a01de26",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/farm-horizon-bg.png",
+      "sha256": "300bc3b7d501043478ad673c2b09ef5ac8bcae855233c533f42801c9fa5780af",
+      "width": 2172,
+      "height": 724,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/icon-backpack.png",
+      "sha256": "a2e4388f1c8a82a97e50ee807c435a7346e0782c4df202cd68450ba59e633725",
+      "width": 256,
+      "height": 256,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/icon-barrel.png",
+      "sha256": "633c75bc0c570e8613e6f3fe2dad793ee9e42dafe11e36fd9f1711b8cbfe4b6f",
+      "width": 256,
+      "height": 256,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/icon-clipboard.png",
+      "sha256": "da4f2e881d37814ff2b97559c3a6610e9aded58baa97527fe80b96fc306e999f",
+      "width": 256,
+      "height": 256,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/icon-sprout.png",
+      "sha256": "a0f67840878fb2a38b304f7dc28d640f7313bd822dc456790d5c243b69791adb",
+      "width": 256,
+      "height": 256,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/panel-frame-v2-clean.png",
+      "sha256": "7b864fb93b6d6b87522b72a5d43f640a638c57ef4ef9fbcb995d335ae9616ef0",
+      "width": 1536,
+      "height": 1024,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/panel-nine-slice-v3.png",
+      "sha256": "dc5f7d6cb045f3fc8023e5f07033d7970be2b5f36cf07f5383e84abf58e0b649",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    },
+    {
+      "path": "stardew-generated/wood-planks.png",
+      "sha256": "9c308e88af243511219b2d0c817c3f8513ec8e34eb0f291de8d18d35b7bd60f7",
+      "width": 1254,
+      "height": 1254,
+      "license": "MIT",
+      "sourceStatement": "maintainer-image2-manual"
+    }
+  ]
+}

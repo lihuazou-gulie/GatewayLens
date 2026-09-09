@@ -1,6 +1,7 @@
 .git
 .gitignore
 .env
+.env.*
 runtime.env
 node_modules
 deploy
@@ -14,6 +15,11 @@ local-secrets
 local-tls
 *.zip
 *.key
+*.pem
+*.p12
+*.pfx
+test-results
+playwright-report
 settings.json
 setup-code
 compose*.yaml

@@ -63,7 +63,12 @@ export function timeOnly(value) {
   const date = new Date(value);
   return Number.isNaN(date.getTime())
     ? String(value)
-    : date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" });
+    : date.toLocaleTimeString("zh-CN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+      });
 }
 
 export function uptime(seconds) {
@@ -82,6 +87,7 @@ export function rangeLabel(value, range) {
   if (!value) return "—";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
-  if (range === "24h") return date.toLocaleTimeString("zh-CN", { hour: "2-digit", hourCycle: "h23" });
+  if (range === "24h")
+    return date.toLocaleTimeString("zh-CN", { hour: "2-digit", hourCycle: "h23" });
   return `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}`;
 }

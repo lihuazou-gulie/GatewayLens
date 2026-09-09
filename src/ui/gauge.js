@@ -10,7 +10,7 @@ const gaugeValues = new WeakMap();
 const gaugeRoots = new Set();
 
 function pointAt(value, radius) {
-  const angle = (180 + value * 1.8) * Math.PI / 180;
+  const angle = ((180 + value * 1.8) * Math.PI) / 180;
   return {
     x: CENTER_X + Math.cos(angle) * radius,
     y: CENTER_Y + Math.sin(angle) * radius,
@@ -18,7 +18,7 @@ function pointAt(value, radius) {
 }
 
 function tickMarkup(index) {
-  const value = index / TICK_COUNT * 100;
+  const value = (index / TICK_COUNT) * 100;
   const major = index % 4 === 0;
   const outer = pointAt(value, 88);
   const inner = pointAt(value, major ? 76 : 81);
@@ -72,7 +72,7 @@ export function updateGaugeVisual(card, value) {
     setAttribute(element, "cy", point.y.toFixed(2));
   });
 
-  const activeIndex = Math.round(normalized / 100 * TICK_COUNT);
+  const activeIndex = Math.round((normalized / 100) * TICK_COUNT);
   card.querySelectorAll(".gpt-gauge-tick").forEach((tick) => {
     toggleClass(tick, "is-active", Number(tick.dataset.tickIndex) <= activeIndex);
   });
