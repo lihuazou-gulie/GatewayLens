@@ -1,0 +1,373 @@
+{
+  "source": "User-provided processed PNG artwork",
+  "files": [
+    {
+      "file": "grass.png",
+      "source": "草.png",
+      "sha256": "701f538d81653552d5e517122520c91767bf8b18590cfa15e5f25825d4a071c5",
+      "src": "/assets/stardew-user/grass.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        45,
+        290,
+        1160,
+        650
+      ]
+    },
+    {
+      "file": "flowers.png",
+      "source": "草堆花.png",
+      "sha256": "a910ff7243be7be3956497b6dca667ea5d17e066196e6741382c8f3f31c21e41",
+      "src": "/assets/stardew-user/flowers.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        128,
+        295,
+        998,
+        666
+      ]
+    },
+    {
+      "file": "berries.png",
+      "source": "草堆果实.png",
+      "sha256": "202cd4fe217855911accbfa41c610485e7cb06b8ce55fafa7b469328ec02be6d",
+      "src": "/assets/stardew-user/berries.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        143,
+        289,
+        968,
+        677
+      ]
+    },
+    {
+      "file": "tree.png",
+      "source": "树木.png",
+      "sha256": "ce2506555f02322daa20dda42e4fa4c4b7eb4eaace4003ed475ea4854a01de26",
+      "src": "/assets/stardew-user/tree.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        187,
+        24,
+        882,
+        1202
+      ]
+    },
+    {
+      "file": "fence.png",
+      "source": "栅栏.png",
+      "sha256": "003bec5beb4d7b5d0b795d35695ac5d0204ae977b6a50536a05a02a3be649252",
+      "src": "/assets/stardew-user/fence.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        98,
+        206,
+        1059,
+        848
+      ]
+    },
+    {
+      "file": "stump.png",
+      "source": "木桩.png",
+      "sha256": "d99ad8df979f4b098b7df2268aefbb7e15ccea432dd26e2f62e839d2264399fd",
+      "src": "/assets/stardew-user/stump.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        246,
+        163,
+        762,
+        912
+      ]
+    },
+    {
+      "file": "sign.png",
+      "source": "木牌.png",
+      "sha256": "b62db89fc7be55492e50ba0f41e3a89ad97c70afe382ee18f5ed40cae799df11",
+      "src": "/assets/stardew-user/sign.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        101,
+        49,
+        1053,
+        1156
+      ]
+    },
+    {
+      "file": "rocks.png",
+      "source": "石块.png",
+      "sha256": "08a288ab1e5ce9c7a9eaee065d4dd0f72789d09597e2d20ca4e798a6e3ec0eaf",
+      "src": "/assets/stardew-user/rocks.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        126,
+        251,
+        996,
+        719
+      ]
+    },
+    {
+      "file": "mushrooms.png",
+      "source": "蘑菇.png",
+      "sha256": "ab10cbb7faa8a80d85f75260abcfcd4ae0c31fcf717a1fde817bf4273e4d8c67",
+      "src": "/assets/stardew-user/mushrooms.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        217,
+        252,
+        815,
+        811
+      ]
+    },
+    {
+      "file": "barrel.png",
+      "source": "酒桶.png",
+      "sha256": "2cf9ab956ffe701950bdac0fb24569f8ccceccbd288c1710e1350cf5f2ed3058",
+      "src": "/assets/stardew-user/barrel.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        222,
+        140,
+        810,
+        1002
+      ]
+    },
+    {
+      "file": "crate.png",
+      "source": "箱子.png",
+      "sha256": "5149fea8685341441df703c76a53dff479bdae6a65308099b8926bfc6242bbe5",
+      "src": "/assets/stardew-user/crate.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        246,
+        270,
+        763,
+        755
+      ]
+    },
+    {
+      "file": "pond.png",
+      "source": "水潭.png",
+      "sha256": "5fcb8de8144e632f6e6b10d9d0a0f3b611355c64d896c067bb83ca576c9f3c0c",
+      "src": "/assets/stardew-user/pond.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        187,
+        297,
+        881,
+        693
+      ]
+    },
+    {
+      "file": "bridge.png",
+      "source": "桥.png",
+      "sha256": "c928bd73899ecfd657a34880de98139ad8a2afbf8222c3bbe93e7003299c2f24",
+      "src": "/assets/stardew-user/bridge.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        121,
+        210,
+        1013,
+        832
+      ]
+    },
+    {
+      "file": "campfire.png",
+      "source": "火堆.png",
+      "sha256": "e85d910fd09a978c0cde0d4144596fedf1bb34626086b14916355b37ec8b35a2",
+      "src": "/assets/stardew-user/campfire.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        295,
+        220,
+        665,
+        876
+      ]
+    },
+    {
+      "file": "cave.png",
+      "source": "山洞.png",
+      "sha256": "efcff0f7362c027606a155e41d27a3e3c1e362132737bc1c36c89f2a176c78ff",
+      "src": "/assets/stardew-user/cave.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        72,
+        241,
+        1111,
+        799
+      ]
+    },
+    {
+      "file": "coins.png",
+      "source": "金币.png",
+      "sha256": "dc4f9a510ceb9cafaf312aa775fa0bed0978bae040e5d5ab3d32fc528303163c",
+      "src": "/assets/stardew-user/coins.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        155,
+        286,
+        953,
+        732
+      ]
+    },
+    {
+      "file": "soil.png",
+      "source": "土.png",
+      "sha256": "eaf9e6f0fb1d0981f96a9e44e2e1b84ce64d18413886ed1bf877769d295a45e2",
+      "src": "/assets/stardew-user/soil.png",
+      "size": [
+        1481,
+        904
+      ],
+      "bounds": [
+        0,
+        0,
+        1481,
+        904
+      ]
+    },
+    {
+      "file": "chicken.png",
+      "source": "小鸡.png",
+      "sha256": "5d055bff98b680d3568394e958f1ea0d64e2da0251c8c162fc87f4dc904ebaa5",
+      "src": "/assets/stardew-user/chicken.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        188,
+        104,
+        878,
+        1081
+      ]
+    },
+    {
+      "file": "duck.png",
+      "source": "鸭子.png",
+      "sha256": "ac1594e744fcd03583b85904e273a088c190b57b586688faa5031a476186f57e",
+      "src": "/assets/stardew-user/duck.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        203,
+        109,
+        856,
+        1088
+      ]
+    },
+    {
+      "file": "cat.png",
+      "source": "小猫.png",
+      "sha256": "36b4bbd6acb99de67e4cbc6d1068e209d4c2b56ea5a9156093064293371c8b4c",
+      "src": "/assets/stardew-user/cat.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        172,
+        167,
+        916,
+        975
+      ]
+    },
+    {
+      "file": "dog.png",
+      "source": "小狗.png",
+      "sha256": "353b81a6f4f3e510fcf8cfeead2e7205d726eff7f9b1c198efc34b6874676754",
+      "src": "/assets/stardew-user/dog.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        173,
+        197,
+        937,
+        950
+      ]
+    },
+    {
+      "file": "cow.png",
+      "source": "小牛.png",
+      "sha256": "3464366b26ce3e4f00879afca0c7904d4adbe351d1f124c0ca951f578005b7df",
+      "src": "/assets/stardew-user/cow.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        103,
+        195,
+        1059,
+        922
+      ]
+    },
+    {
+      "file": "sheep.png",
+      "source": "小羊.png",
+      "sha256": "d9337ed1adccba90c78b72fe1259e57ebba736683e62361b5f5eb12f1e57c984",
+      "src": "/assets/stardew-user/sheep.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "bounds": [
+        143,
+        166,
+        1030,
+        1026
+      ]
+    }
+  ]
+}

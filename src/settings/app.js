@@ -1,6 +1,10 @@
 import { KanbanApi } from "../api/client.js";
 import { renderAuth, renderSettings, readDisplay, readProbe } from "./render.js";
 import { statuses } from "../monitor/cards.js";
+import { initTheme } from "../ui/theme.js";
+import { initFarmScenery } from "../ui/farm-scenery.js";
+initTheme();
+initFarmScenery();
 const api = new KanbanApi(); let status; let settings;
 function message(text, error = false) { const box = document.getElementById("settings-message"); box.hidden = !text; box.textContent = text; box.classList.toggle("error", error); }
 async function loadSettings() {

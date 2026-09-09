@@ -149,6 +149,8 @@ test("settings changes detect stale revisions and source changes reset published
 test("static paths deny settings files, source internals, and old Runtime APIs", async (t) => {
   const h = await harness(t);
   for (const path of ["/", "/groups", "/models", "/settings"]) assert.equal((await fetch(h.origin + path)).status, 200);
+  const asset = await fetch(h.origin + "/assets/stardew-generated/icon-sprout.png");
+  assert.equal(asset.status, 200); assert.equal(asset.headers.get("content-type"), "image/png");
   for (const path of ["/settings.json", "/server/config.mjs", "/runtime.env", "/runtime-api/runtime-status", "/src/../server/config.mjs"]) assert.equal((await fetch(h.origin + path)).status, 404);
 });
 test("logout invalidates the session and password updates require the current password", async (t) => {

@@ -1,0 +1,26 @@
+:root[data-theme="stardew"] {
+  --bg: #925027;
+  --bg-soft: #ab6330;
+  --panel: #ffe1a2;
+  --panel-strong: #fff0c7;
+  --panel-muted: #efc184;
+  --line: #c78e47;
+  --line-strong: #74401f;
+  --text: #3f230f;
+  --text-soft: #67401f;
+  --text-muted: #865a31;
+  --lime: #4e872d;
+  --lime-strong: #386c20;
+  --mint: #2c844f;
+  --cyan: #1672a6;
+  --amber: #a95610;
+  --rose: #a43125;
+  --slate: #776347;
+  --shadow: 0 5px 0 #4c281a, 0 9px 12px #351b1640;
+  --radius-xl: 0;
+  --radius-lg: 0;
+  --radius-md: 2px;
+  --font-sans: "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Courier New", Consolas, monospace;
+  --farm-frame: url("/assets/stardew-generated/panel-nine-slice-v3.png");
+}

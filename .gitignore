@@ -18,3 +18,4 @@ setup-code
 docs/*
 !docs/UNIFIED_MONITOR.md
 !docs/DOCKER_DEPLOYMENT.md
+!docs/UI_SKIN_RULES.md

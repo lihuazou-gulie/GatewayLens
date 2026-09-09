@@ -1,18 +1,22 @@
 import { element, writeText, setAttribute, setStyle, setVisible, toggleClass } from "../ui/dom.js";
 import { gaugeSvgMarkup, updateGaugeVisual } from "../ui/gauge.js";
 import { compactNumber, percent, duration, number } from "../ui/formatters.js";
+import { metricIconFor } from "../ui/stardew-assets.js";
 export const statuses = { ok: "已连接", hidden: "模块已关闭", disabled: "监控未启用", unsupported: "接口未提供", denied: "功能未开启或权限不足", unavailable: "数据暂不可用", unconfigured: "尚未配置" };
 export function tone(value, threshold = 95) { return value === null || value === undefined ? "muted" : value < threshold ? "warning" : "healthy"; }
 
 export function createMetricCard() {
   const node = element("article", "panel metric-card");
-  const label = element("p", "metric-label"), body = element("div", "metric-body");
+  const heading = element("div", "metric-heading"), icon = element("img", "metric-icon"), label = element("p", "metric-label"), body = element("div", "metric-body");
+  setAttribute(icon, "alt", ""); setAttribute(icon, "aria-hidden", "true");
+  heading.append(icon, label);
   const value = element("strong", "metric-value"), note = element("p", "metric-note");
   let arc;
-  body.append(value); node.append(label, body, note);
+  body.append(value); node.append(heading, body, note);
   return { node, update(data) {
     const gauge = data.gauge ?? null;
     setStyle(node, "--card-accent", `var(--${data.color || "mint"})`);
+    const iconPath = metricIconFor(data.key); setVisible(icon, Boolean(iconPath)); if (iconPath) setAttribute(icon, "src", iconPath);
     writeText(label, data.label); writeText(value, data.value); writeText(note, data.note);
     if (gauge !== null && !arc) {
       arc = element("div", "gpt-gauge"); arc.innerHTML = gaugeSvgMarkup(); body.prepend(arc);

@@ -7,6 +7,7 @@ COPY index.html ./
 COPY settings ./settings
 COPY src ./src
 COPY styles ./styles
+COPY assets ./assets
 COPY server ./server
 
 FROM application AS tested

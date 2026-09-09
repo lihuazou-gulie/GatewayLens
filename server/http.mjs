@@ -8,7 +8,9 @@ const MIME_TYPES = Object.freeze({
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".webp": "image/webp",
 });
 
 export function securityHeaders(config, { api = false } = {}) {
@@ -51,7 +53,7 @@ export function sendError(response, error, config) {
 }
 
 function isAllowedStaticPath(pathname) {
-  return ["/", "/index.html", "/groups", "/models", "/settings", "/settings/"].includes(pathname) || pathname.startsWith("/src/") || pathname.startsWith("/styles/");
+  return ["/", "/index.html", "/groups", "/models", "/settings", "/settings/"].includes(pathname) || pathname.startsWith("/assets/") || pathname.startsWith("/src/") || pathname.startsWith("/styles/");
 }
 
 export async function serveStatic(response, pathname, config) {

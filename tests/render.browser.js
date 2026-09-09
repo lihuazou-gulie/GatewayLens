@@ -1,4 +1,8 @@
 import { createMonitorRenderer } from "/src/monitor/render.js";
+import { applyTheme } from "/src/ui/theme.js";
+import { initFarmScenery } from "/src/ui/farm-scenery.js";
+applyTheme("stardew");
+initFarmScenery();
 const result = document.getElementById("render-test-result");
 const passed = [];
 function assert(condition, message) { if (!condition) throw new Error(message); }
@@ -15,6 +19,22 @@ try {
   const originalNodes = allNodes();
   const qualityCard = query("#metrics .metric-card"), needle = qualityCard.querySelector(".gpt-gauge-needle");
   const gauge = qualityCard.querySelector(".gpt-gauge"), trafficBar = query(".chart-bar"), previousHeight = trafficBar.getAttribute("height");
+  applyTheme("default");
+  assert(sameNodes(originalNodes) && getComputedStyle(gauge.querySelector(".gpt-gauge-wood-needle")).display === "none", "Default theme replaced nodes or retained the farm pointer");
+  const sceneryNodes = [...document.querySelectorAll(".farm-scene")];
+  assert(sceneryNodes.length === 3 && sceneryNodes.every(node => getComputedStyle(node).display === "none"), "Scenery leaked into the default theme");
+  applyTheme("stardew");
+  initFarmScenery();
+  assert(document.querySelectorAll(".farm-scene").length === sceneryNodes.length && sceneryNodes.every(node => node.isConnected && getComputedStyle(node).pointerEvents === "none"), "Theme switching duplicated scenery or intercepted controls");
+  assert(sameNodes(originalNodes) && getComputedStyle(gauge.querySelector(".gpt-gauge-wood-needle")).display !== "none", "Farm theme replaced nodes or failed to select its pointer");
+  passed.push("皮肤切换：复用节点并切换仪表表现");
+  const pageWidth = document.documentElement.clientWidth;
+  for (const selector of [".topbar", ".farm-scene--meadow", ".farm-scene--footer"]) {
+    const bounds = query(selector).getBoundingClientRect();
+    assert(Math.abs(bounds.left) <= 1 && Math.abs(bounds.right - pageWidth) <= 1, `${selector} leaves a gap at the page edges`);
+  }
+  assert(document.documentElement.scrollWidth === pageWidth, "Scenery introduced horizontal page overflow");
+  passed.push("场景边界：天空与草地铺满页面且无横向溢出");
   const link = query("#group-grid a"); link.focus();
   observer.observe(document.body, { childList: true, attributes: true, characterData: true, subtree: true });
   render({ ...state, data: structuredClone(data) });
@@ -82,6 +102,8 @@ try {
   assert(roots.every((id) => document.getElementById(id).children.length === 0), "Authentication loss retained private monitoring nodes");
   assert(!qualityCard.isConnected && !needle.isConnected, "Authentication loss retained stale references in the DOM");
   assert(document.getElementById("scope-select").options.length === 1 && document.getElementById("model-select").options.length === 1, "Authentication loss retained private selectors");
+  assert(document.body.getBoundingClientRect().height >= innerHeight && query(".app-shell").getBoundingClientRect().height >= innerHeight, "Short pages leave the viewport without a background or footer");
+  passed.push("短页面：登录失效时背景和页脚仍覆盖窗口高度");
   render({ ...state, view: "overview", topic: "", data });
   assert(query("#metrics .metric-card") !== qualityCard, "Authentication reset reused discarded content");
   passed.push("登录失效：清除全部旧数据并可重新载入");

@@ -1,0 +1,58 @@
+:root[data-theme="stardew"] .settings-shell { max-width: 1780px; }
+:root[data-theme="stardew"] .settings-topbar { gap: 16px; }
+:root[data-theme="stardew"] .settings-back-link { padding: 10px 14px; background: #fbd698; border: 2px solid #8e5929; color: #542c12; font-size: 13px; font-weight: 700; box-shadow: 0 3px #573117; }
+:root[data-theme="stardew"] .settings-shell main { padding-top: 18px; }
+:root[data-theme="stardew"] .settings-panel { padding: 12px 14px; margin-bottom: 22px; }
+:root[data-theme="stardew"] .settings-workspace { display: grid; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+:root[data-theme="stardew"] .settings-workspace:not(:has(#display-section:not([hidden]))) { grid-template-columns: minmax(0, 1fr); }
+:root[data-theme="stardew"] .settings-sidebar { display: grid; gap: 22px; min-width: 0; }
+:root[data-theme="stardew"] .settings-workspace .settings-panel { margin-bottom: 0; }
+:root[data-theme="stardew"] .settings-panel form { gap: 16px; }
+:root[data-theme="stardew"] .settings-panel .settings-form-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+:root[data-theme="stardew"] .settings-field-wide { grid-column: 1 / -1; }
+:root[data-theme="stardew"] .settings-panel label:not(.checkbox-line):not(.theme-option) { gap: 7px; }
+:root[data-theme="stardew"] .settings-panel :is(label, select, input) { min-width: 0; }
+:root[data-theme="stardew"] .settings-panel select { width: 100%; min-height: 44px; }
+:root[data-theme="stardew"] #connection-result:empty { display: none; }
+:root[data-theme="stardew"] .settings-panel :is(h2, h3) { color: #45280e; font-weight: 800; }
+:root[data-theme="stardew"] .settings-section-head { margin-bottom: 18px; gap: 12px; }
+:root[data-theme="stardew"] .settings-section-head > div { min-width: 0; flex: 1; }
+:root[data-theme="stardew"] .settings-section-head h2 { margin: 4px 0 0; }
+:root[data-theme="stardew"] .settings-section-head .eyebrow { margin-bottom: 0; }
+:root[data-theme="stardew"] .settings-section-head::before { content: ""; flex: 0 0 44px; height: 48px; background: url("/assets/stardew-generated/icon-sprout.png") center / contain no-repeat; image-rendering: pixelated; }
+:root[data-theme="stardew"] #connection-section .settings-section-head::before { background-image: url("/assets/stardew-generated/icon-barrel.png"); }
+:root[data-theme="stardew"] #probe-section .settings-section-head::before { background-image: url("/assets/stardew-generated/icon-backpack.png"); }
+:root[data-theme="stardew"] .theme-settings .settings-section-head::before { background-image: url("/assets/stardew-user/flowers.png"); background-size: 60px; }
+:root[data-theme="stardew"] .settings-panel .lead { color: #75502b; font-size: 13px; }
+:root[data-theme="stardew"] .settings-panel :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select) { color: #3f2711; background: #fff0cc; border: 2px solid #bc8543; border-radius: 1px; box-shadow: inset 0 2px #754a2220; }
+:root[data-theme="stardew"] .settings-panel input:not([type="checkbox"]):not([type="radio"]):is(:autofill, :-webkit-autofill) { -webkit-text-fill-color: #3f2711; caret-color: #3f2711; box-shadow: inset 0 0 0 1000px #fff0cc; }
+:root[data-theme="stardew"] .settings-panel :is(input, textarea)::placeholder { color: #987344; opacity: 1; }
+:root[data-theme="stardew"] .settings-panel label { color: #5e391b; }
+:root[data-theme="stardew"] .settings-panel :is(input[type="checkbox"], input[type="radio"]) { accent-color: #558236; }
+:root[data-theme="stardew"] .settings-panel fieldset { border: 2px solid #c48d45; border-radius: 0; background: #fff0c633; }
+:root[data-theme="stardew"] .settings-panel legend { padding: 0 8px; color: #67401d; font-weight: 800; }
+:root[data-theme="stardew"] :is(.field-note, .capabilities) { color: #75502b; }
+:root[data-theme="stardew"] .group-options { gap: 10px; }
+:root[data-theme="stardew"] .group-option { padding: 9px 10px; border: 1px solid #d3a367; border-radius: 1px; background: #f4d19466; gap: 10px; }
+:root[data-theme="stardew"] .group-option:has(input:checked) { border-color: #749144; background: #e6d99a; }
+:root[data-theme="stardew"] .theme-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+:root[data-theme="stardew"] .theme-option { display: flex; align-items: flex-start; gap: 10px; padding: 15px; border: 2px solid #bc8543; background: #ffe5b3; }
+:root[data-theme="stardew"] .theme-option:has(input:checked) { border-color: #507d31; box-shadow: inset 0 0 0 2px #afbe72; background: #ece0a5; }
+:root[data-theme="stardew"] .theme-option small { display: block; margin-top: 4px; color: #80602e; }
+:root[data-theme="stardew"] details.settings-panel summary { color: #5a3416; font-weight: 800; }
+:root[data-theme="stardew"] details[open].settings-panel summary { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #c89650; }
+@media (max-width: 1150px) {
+  :root[data-theme="stardew"] .settings-workspace { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  :root[data-theme="stardew"] .settings-panel { padding: 8px 4px; }
+  :root[data-theme="stardew"] .settings-panel .settings-form-columns { grid-template-columns: minmax(0, 1fr); }
+  :root[data-theme="stardew"] .theme-options { grid-template-columns: 1fr; }
+  :root[data-theme="stardew"] .settings-topbar { display: flex; flex-wrap: wrap; justify-content: center; align-content: start; }
+  :root[data-theme="stardew"] .settings-topbar .brand { font-size: 13px; }
+  :root[data-theme="stardew"] .group-option { padding: 10px; }
+  :root[data-theme="stardew"] .settings-section-head { align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+  :root[data-theme="stardew"] .settings-section-head::before { flex-basis: 32px; height: 38px; }
+  :root[data-theme="stardew"] .settings-section-head > div { flex: 1 1 calc(100% - 42px); }
+  :root[data-theme="stardew"] .settings-section-head > :is(.chip, .button) { margin-left: 42px; }
+}

@@ -8,7 +8,7 @@ docs
 scripts/*
 !scripts/capture-compose.mjs
 outputs
-data
+/data
 secrets
 local-secrets
 local-tls

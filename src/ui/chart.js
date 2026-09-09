@@ -1,5 +1,6 @@
 import { compactNumber, percent, rangeLabel } from "./formatters.js";
 import { setAttribute, writeText } from "./dom.js";
+import { currentTheme } from "./theme.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const CHART_WIDTH = 920;
@@ -7,6 +8,7 @@ const CHART_HEIGHT = 300;
 const MARGIN = { top: 16, right: 26, bottom: 38, left: 48 };
 const GRID_STEPS = [0, 0.25, 0.5, 0.75, 1];
 const chartStates = new WeakMap();
+const chartRoots = new Set();
 
 export function clearTrendChart(svg) {
   chartStates.delete(svg);
@@ -41,8 +43,10 @@ function createChartState(svg) {
 
   const defs = node("defs");
   const gradient = node("linearGradient", { id: "bar-gradient", x1: "0", y1: "0", x2: "0", y2: "1" });
-  gradient.append(node("stop", { offset: "0%", "stop-color": "#62dce7", "stop-opacity": "0.82" }));
-  gradient.append(node("stop", { offset: "100%", "stop-color": "#2a7777", "stop-opacity": "0.1" }));
+  const theme = currentTheme();
+  const start = node("stop", { offset: "0%", "stop-color": theme.chart.gradientStart, "stop-opacity": theme.chart.opacityStart, "data-theme-stop": "start" });
+  const end = node("stop", { offset: "100%", "stop-color": theme.chart.gradientEnd, "stop-opacity": theme.chart.opacityEnd, "data-theme-stop": "end" });
+  gradient.append(start, end);
   defs.append(gradient);
   svg.append(defs);
 
@@ -68,8 +72,10 @@ function createChartState(svg) {
     gridLabels,
     line,
     initialized: false,
+    gradient,
   };
   chartStates.set(svg, state);
+  chartRoots.add(svg);
   return state;
 }
 
@@ -141,7 +147,7 @@ export function drawTrendChart(svg, buckets, range) {
     const y = MARGIN.top + plotHeight - barHeight;
     let entry = state.bars.get(key);
     if (!entry) {
-      const rect = node("rect", { class: "chart-bar", rx: 3 });
+      const rect = node("rect", { class: "chart-bar", rx: currentTheme().chart.radius });
       const title = node("title");
       rect.append(title);
       svg.querySelector('[data-layer="bars"]').append(rect);
@@ -205,3 +211,16 @@ export function drawTrendChart(svg, buckets, range) {
   }
   state.initialized = true;
 }
+
+document.addEventListener("kanban-theme-change", () => {
+  const theme = currentTheme();
+  chartRoots.forEach((svg) => {
+    const state = chartStates.get(svg);
+    if (!state) return;
+    const start = state.gradient.querySelector('[data-theme-stop="start"]');
+    const end = state.gradient.querySelector('[data-theme-stop="end"]');
+    if (start) { setAttribute(start, "stop-color", theme.chart.gradientStart); setAttribute(start, "stop-opacity", theme.chart.opacityStart); }
+    if (end) { setAttribute(end, "stop-color", theme.chart.gradientEnd); setAttribute(end, "stop-opacity", theme.chart.opacityEnd); }
+    state.bars.forEach(({ rect }) => setAttribute(rect, "rx", theme.chart.radius));
+  });
+});

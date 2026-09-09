@@ -26,7 +26,7 @@ export function renderSettings(settings, groups, probe = null) {
     const label = element("label", "checkbox-line"); const check = element("input"); check.type = "checkbox"; check.checked = Boolean(selected); check.dataset.group = "true";
     label.append(check, element("span", "", group.name), element("small", "chip", group.platform));
     const alias = element("input"); alias.value = selected?.label || group.name; alias.maxLength = 80; alias.setAttribute("aria-label", `${group.name} 展示名称`); alias.dataset.alias = "true";
-    const up = element("button", "button small subtle", "↑"); up.type = "button"; up.setAttribute("aria-label", `${group.name} 上移`); up.addEventListener("click", () => { if (row.previousElementSibling) row.before(row.previousElementSibling); });
+    const up = element("button", "button small subtle", "↑"); up.type = "button"; up.setAttribute("aria-label", `${group.name} 上移`); up.addEventListener("click", () => { if (row.previousElementSibling) row.previousElementSibling.before(row); });
     row.append(label, alias, up); return row;
   }).filter(Boolean);
   document.getElementById("group-options").replaceChildren(...rows, ...(!rows.length ? [element("p", "field-note", "站点没有可用分组")] : []));
@@ -44,6 +44,7 @@ function renderProbe(settings, groups, probe) {
   document.getElementById("probe-endpoint").value = config.endpoint || "/v1/chat/completions";
   document.getElementById("probe-interval").value = config.intervalSeconds || 300;
   const options = [element("option", "", "请选择已展示分组")];
+  options[0].value = "";
   for (const selected of settings.display.groups) {
     const catalogGroup = groups.find((group) => group.id === selected.id);
     options.push(element("option", "", selected.label || catalogGroup?.name || String(selected.id)));

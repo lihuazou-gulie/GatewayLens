@@ -1,0 +1,124 @@
+{
+  "farm-horizon-bg.png": {
+    "originalSize": [
+      2172,
+      724
+    ],
+    "finalSize": [
+      2172,
+      724
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      2172,
+      724
+    ],
+    "role": "header-background"
+  },
+  "icon-sprout.png": {
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "finalSize": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      19,
+      53,
+      232,
+      238
+    ],
+    "role": "metric-icon"
+  },
+  "icon-clipboard.png": {
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "finalSize": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      77,
+      46,
+      221,
+      211
+    ],
+    "role": "metric-icon"
+  },
+  "icon-backpack.png": {
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "finalSize": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      23,
+      37,
+      238,
+      239
+    ],
+    "role": "metric-icon"
+  },
+  "icon-barrel.png": {
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "finalSize": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      30,
+      20,
+      233,
+      234
+    ],
+    "role": "metric-icon"
+  },
+  "panel-frame-v2-clean.png": {
+    "finalSize": [
+      1536,
+      1024
+    ],
+    "alphaBounds": [
+      11,
+      108,
+      1525,
+      899
+    ],
+    "role": "panel-skin",
+    "background": "transparent"
+  },
+  "panel-nine-slice-v3.png": {
+    "finalSize": [
+      1254,
+      1254
+    ],
+    "role": "nine-slice-panel",
+    "background": "opaque",
+    "slice": "14%",
+    "alphaBounds": [
+      0,
+      0,
+      1254,
+      1254
+    ]
+  },
+  "wood-planks.png": {
+    "finalSize": [
+      1254,
+      1254
+    ],
+    "role": "repeatable-wood-background",
+    "background": "opaque"
+  }
+}

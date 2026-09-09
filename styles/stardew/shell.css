@@ -1,0 +1,84 @@
+:root[data-theme="stardew"] body {
+  min-width: 0;
+  min-height: 100vh;
+  container-type: inline-size;
+  background-color: #8d4d28;
+  background-image: url("/assets/stardew-generated/wood-planks.png");
+  background-size: 512px 512px;
+  image-rendering: pixelated;
+}
+:root[data-theme="stardew"] :is(body::before, body::after, .ambient, .ambient-grid, .scanline) { display: none; }
+:root[data-theme="stardew"] .app-shell { display: flex; flex-direction: column; min-height: 100vh; width: calc(100% - 28px); max-width: 1780px; }
+:root[data-theme="stardew"] .app-shell > main { flex: 1; }
+:root[data-theme="stardew"] :is(.topbar, .settings-topbar) {
+  min-height: 112px;
+  width: 100cqi;
+  margin: 0 calc(50% - 50cqi);
+  padding: 16px max(22px, calc((100cqi - 1780px) / 2 + 8px)) 12px;
+  border-bottom: 7px ridge #9e562b;
+  background: linear-gradient(0deg, #70401e 0 9px, transparent 9px), url("/assets/stardew-generated/farm-horizon-bg.png") center 61% / 100% auto;
+  box-shadow: 0 4px 0 #442413;
+  backdrop-filter: none;
+}
+:root[data-theme="stardew"] .topbar { grid-template-columns: minmax(230px, 1fr) auto minmax(120px, 1fr); gap: 18px; }
+:root[data-theme="stardew"] .brand {
+  width: fit-content;
+  max-width: 100%;
+  gap: 10px;
+  padding: 2px 10px;
+  border: 12px solid transparent;
+  border-image: var(--farm-frame) 14% fill / 12px / 0 stretch;
+  border-radius: 0;
+  background: none;
+  color: #371e0e;
+  box-shadow: 0 4px 0 #3c211aa6;
+}
+:root[data-theme="stardew"] .brand-mark { flex: 0 0 42px; width: 42px; height: 42px; padding: 0; border: 0; border-radius: 0; background: url("/assets/stardew-generated/icon-sprout.png") center / contain no-repeat; box-shadow: none; }
+:root[data-theme="stardew"] .brand-mark span { display: none; }
+:root[data-theme="stardew"] .brand-copy strong { font-size: clamp(18px, 1.75vw, 28px); font-weight: 900; letter-spacing: .05em; overflow-wrap: anywhere; }
+:root[data-theme="stardew"] .brand-copy small { margin-top: 4px; color: #67401f; font-size: 10px; letter-spacing: .09em; }
+:root[data-theme="stardew"] .view-nav { align-self: end; padding: 4px; border: 4px ridge #b47738; border-radius: 0; background: repeating-linear-gradient(0deg, #552910 0 2px, #854218 2px 24px); box-shadow: 0 4px 0 #452414; }
+:root[data-theme="stardew"] .view-nav a { padding: 12px 24px; border-radius: 1px; color: #ffe3a0; font-size: 18px; font-weight: 800; }
+:root[data-theme="stardew"] .view-nav a[aria-current="page"] { color: #3d220f; background: #ffd17b; box-shadow: inset 0 -4px #d1903c, inset 0 2px #ffe8ab; }
+:root[data-theme="stardew"] .settings-link { justify-self: end; align-self: end; padding: 10px 14px; border: 3px ridge #a5672d; border-radius: 0; color: #43220d; background: #ffd795; box-shadow: 0 4px 0 #452414; font-weight: 700; }
+:root[data-theme="stardew"] main { padding-top: 10px; }
+:root[data-theme="stardew"] .page-heading { gap: 16px; margin-bottom: 8px; align-items: center; }
+:root[data-theme="stardew"] .page-heading > div:first-child { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
+:root[data-theme="stardew"] .page-heading h1 { margin: 0; color: #ffedc2; font-size: 21px; font-weight: 800; letter-spacing: .02em; text-shadow: 2px 2px #4a2718; }
+:root[data-theme="stardew"] .page-heading .eyebrow { margin: 0; color: #ffe0a2; font-size: 9px; }
+:root[data-theme="stardew"] .page-heading .lead { margin: 0; color: #ffdeb0; font-size: 11px; }
+:root[data-theme="stardew"] .sync-card { margin: 0; gap: 9px; color: #fff0c8; }
+:root[data-theme="stardew"] .sync-card small { color: #eac18c; font-size: 10px; margin-top: 3px; }
+:root[data-theme="stardew"] .status-dot { border-radius: 0; border: 1px solid #ffdf91; box-shadow: none; }
+:root[data-theme="stardew"] .eyebrow { color: #61401f; font-weight: 800; letter-spacing: .08em; }
+:root[data-theme="stardew"] .section-heading { margin: 28px 0 14px; color: #ffeac1; }
+:root[data-theme="stardew"] .section-heading :is(h2, .eyebrow) { color: #ffeac1; text-shadow: 1px 2px #4d2614; }
+:root[data-theme="stardew"] #model-note { padding: 10px 14px; border-left: 3px solid #eab264; color: #ffe1b0; background: #603319b8; font-size: 12px; line-height: 1.8; }
+:root[data-theme="stardew"] footer { position: relative; margin-top: 28px; margin-bottom: 40px; padding-bottom: 20px; color: #ffe0ae; border-color: #da9a51; }
+:root[data-theme="stardew"] footer a { color: #ffe3a1; }
+:root[data-theme="stardew"] footer::after { position: absolute; right: -14px; bottom: -40px; left: -14px; height: 38px; background: url("/assets/stardew-generated/farm-horizon-bg.png") center bottom / auto 260px repeat-x; content: ""; pointer-events: none; }
+:root[data-theme="stardew"] .particle { width: 3px; height: 3px; border-radius: 0; background: #f8d56a; box-shadow: none; }
+@media (max-width: 1150px) {
+  :root[data-theme="stardew"] .topbar { grid-template-columns: 1fr auto; }
+  :root[data-theme="stardew"] .topbar > .settings-link { display: none; }
+  :root[data-theme="stardew"] .view-nav a { padding: 10px 16px; font-size: 16px; }
+  :root[data-theme="stardew"] .page-heading .lead { flex-basis: 100%; }
+}
+@media (max-width: 720px) {
+  :root[data-theme="stardew"] .app-shell { width: calc(100% - 20px); }
+  :root[data-theme="stardew"] :is(.topbar, .settings-topbar) { padding: 12px 10px; background-size: auto 220px; }
+  :root[data-theme="stardew"] .topbar { display: flex; justify-content: center; gap: 10px; }
+  :root[data-theme="stardew"] .brand { padding-right: 6px; padding-left: 6px; }
+  :root[data-theme="stardew"] .brand-mark { flex-basis: 32px; width: 32px; height: 36px; }
+  :root[data-theme="stardew"] .brand-copy { min-width: 0; }
+  :root[data-theme="stardew"] .brand-copy strong { font-size: 18px; }
+  :root[data-theme="stardew"] .brand-copy small { font-size: 8px; }
+  :root[data-theme="stardew"] .view-nav { width: 100%; justify-content: stretch; }
+  :root[data-theme="stardew"] .view-nav a { flex: 1; padding: 10px 4px; text-align: center; font-size: 15px; }
+  :root[data-theme="stardew"] .page-heading { display: block; }
+  :root[data-theme="stardew"] .page-heading h1 { font-size: 19px; }
+  :root[data-theme="stardew"] .page-heading .eyebrow { display: none; }
+  :root[data-theme="stardew"] .sync-card { margin-top: 8px; justify-content: space-between; }
+  :root[data-theme="stardew"] footer { flex-wrap: wrap; gap: 12px; }
+  :root[data-theme="stardew"] footer::after { left: -10px; right: -10px; }
+}

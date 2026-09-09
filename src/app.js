@@ -2,8 +2,11 @@ import { KanbanApi } from "./api/client.js";
 import { createStore } from "./core/store.js";
 import { Poller } from "./core/poller.js";
 import { initAmbientEffects } from "./ui/effects.js";
+import { initTheme } from "./ui/theme.js";
+import { initFarmScenery } from "./ui/farm-scenery.js";
 import { createMonitorRenderer } from "./monitor/render.js";
-const api = new KanbanApi(); const params = new URLSearchParams(location.search);
+const api = new KanbanApi(); const params = new URLSearchParams(location.search); initTheme();
+initFarmScenery();
 const store = createStore({ view: location.pathname === "/models" ? "models" : location.pathname === "/groups" ? "groups" : "overview",
   range: params.get("range") || "24h", scope: params.get("scope") || "all", topic: params.get("topic") || "", model: "", knownModels: [], data: null, error: "", loading: true, admin: false });
 let sequence = 0;

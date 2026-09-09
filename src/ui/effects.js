@@ -1,29 +1,36 @@
+import { currentTheme } from "./theme.js";
+
+function renderParticles(field, effects) {
+  field.querySelectorAll(".particle").forEach((particle) => particle.remove());
+  const palette = effects.palette;
+  for (let index = 0; index < effects.particleCount; index += 1) {
+    const particle = document.createElement("span");
+    particle.className = "particle";
+    particle.style.setProperty("--particle-size", `${index % 5 === 0 ? 3 : 2}px`);
+    particle.style.setProperty("--particle-color", palette[index % palette.length]);
+    particle.style.setProperty("--particle-duration", `${8 + (index % 6) * 1.8}s`);
+    particle.style.setProperty("--particle-delay", `${-(index % 8) * 1.4}s`);
+    particle.style.setProperty("--particle-drift", `${(index % 2 ? 1 : -1) * (12 + (index % 5) * 8)}px`);
+    particle.style.left = `${4 + ((index * 37) % 92)}%`;
+    particle.style.top = `${10 + ((index * 53) % 82)}%`;
+    field.appendChild(particle);
+  }
+}
+
 export function initAmbientEffects() {
   const field = document.querySelector(".particle-field");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (field && !reduceMotion) {
-    const palette = ["#c7f36b", "#65e6b4", "#62dce7"];
-    for (let index = 0; index < 26; index += 1) {
-      const particle = document.createElement("span");
-      particle.className = "particle";
-      particle.style.setProperty("--particle-size", `${index % 5 === 0 ? 3 : 2}px`);
-      particle.style.setProperty("--particle-color", palette[index % palette.length]);
-      particle.style.setProperty("--particle-duration", `${8 + (index % 6) * 1.8}s`);
-      particle.style.setProperty("--particle-delay", `${-(index % 8) * 1.4}s`);
-      particle.style.setProperty("--particle-drift", `${(index % 2 ? 1 : -1) * (12 + (index % 5) * 8)}px`);
-      particle.style.left = `${4 + ((index * 37) % 92)}%`;
-      particle.style.top = `${10 + ((index * 53) % 82)}%`;
-      field.appendChild(particle);
-    }
-  }
+  const paint = () => { if (field && !reduceMotion) renderParticles(field, currentTheme().effects); };
+  paint();
+  document.addEventListener("kanban-theme-change", paint);
 
   document.querySelectorAll(".panel").forEach((panel) => {
     panel.addEventListener("pointermove", (event) => {
       const rect = panel.getBoundingClientRect();
       panel.style.setProperty("--spot-x", `${event.clientX - rect.left - 105}px`);
       panel.style.setProperty("--spot-y", `${event.clientY - rect.top - 105}px`);
-      if (!reduceMotion && event.pointerType === "mouse") {
+      if (!reduceMotion && currentTheme().effects.tilt && event.pointerType === "mouse") {
         const x = (event.clientX - rect.left) / rect.width - 0.5;
         const y = (event.clientY - rect.top) / rect.height - 0.5;
         panel.style.transform = `perspective(900px) translateY(-3px) rotateX(${y * -1.5}deg) rotateY(${x * 1.5}deg)`;

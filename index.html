@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sub2API 监控</title><link rel="icon" href="data:,">
-<link rel="stylesheet" href="/styles/tokens.css"><link rel="stylesheet" href="/styles/base.css"><link rel="stylesheet" href="/styles/gauge.css"><link rel="stylesheet" href="/styles/monitor.css">
+<link rel="stylesheet" href="/styles/tokens.css"><link rel="stylesheet" href="/styles/base.css"><link rel="stylesheet" href="/styles/gauge.css"><link rel="stylesheet" href="/styles/monitor.css"><link rel="stylesheet" href="/styles/stardew.css">
 <script type="module" src="/src/app.js"></script></head>
 <body><div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="particle-field" aria-hidden="true"></div>
 <div class="app-shell">
@@ -17,7 +17,7 @@
 <div id="notice" class="notice" role="status" hidden></div>
 <div id="pool-health-alert" class="alert-banner" role="alert" hidden><span class="alert-orb"></span><div><strong>号池可用率低于设置阈值</strong><p id="pool-alert-copy"></p></div><a href="/groups">查看分组 →</a></div>
 <section class="metric-grid" id="metrics" aria-label="关键指标"></section>
-<section class="content-grid" id="overview-panels"><article class="panel trend-panel" id="traffic-panel"><header class="panel-header"><div><p class="eyebrow">TRAFFIC / HISTORY</p><h2>调用趋势</h2></div><span class="metric-tag">请求次数</span></header><svg id="trend-chart" class="trend-chart" viewBox="0 0 920 300" role="img" aria-label="请求量趋势图"></svg><p class="panel-note" id="trend-note"></p></article>
+<section class="content-grid" id="overview-panels"><article class="panel trend-panel" id="traffic-panel"><header class="panel-header"><div><p class="eyebrow">TRAFFIC / HISTORY</p><h2>调用趋势</h2></div><span class="metric-tag">请求次数</span></header><div class="chart-viewport" tabindex="0" role="region" aria-label="调用趋势图表，可左右滚动"><svg id="trend-chart" class="trend-chart" viewBox="0 0 920 300" role="img" aria-label="请求量趋势图"></svg></div><p class="panel-note" id="trend-note"></p></article>
 <article class="panel" id="pool-panel"><header class="panel-header"><div><p class="eyebrow">RESOURCE / AVAILABILITY</p><h2>号池可用性</h2></div></header><div id="pool-content" class="panel-body"></div></article></section>
 <section class="section-heading" id="groups-heading"><div><p class="eyebrow">GROUPS / QUALITY & CAPACITY</p><h2>分组运行状态</h2></div><span id="group-count" class="metric-tag"></span></section><section id="group-grid" class="group-grid"></section>
 <section id="model-section" hidden><div class="section-heading"><div><p class="eyebrow">MODELS / OBSERVED PERFORMANCE</p><h2 id="models-title">模型表现</h2></div><span id="model-count" class="metric-tag"></span></div><p id="model-note" class="lead"></p><div id="model-grid" class="group-grid"></div></section>
