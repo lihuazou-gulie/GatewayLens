@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
+import { isUnapprovedDocument } from "./public-documents.mjs";
 const history = process.argv.includes("--history");
 const rules = {
   private_key: /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/,
@@ -49,6 +50,7 @@ function workspaceFiles() {
   return walk();
 }
 function scan(path, bytes, revision = "worktree") {
+  if (isUnapprovedDocument(path)) hits.push({ path, revision, rule: "unapproved_document" });
   if (forbiddenPath.test(path)) hits.push({ path, revision, rule: "private_file" });
   if (privateWorkspacePath.test(path))
     hits.push({ path, revision, rule: "private_workspace_file" });

@@ -31,3 +31,12 @@ SKILL.md export-ignore
 .github/prompts/** export-ignore
 *.prompt.md export-ignore
 *.instructions.md export-ignore
+*.[mM][dD] export-ignore
+*.[mM][dD][xX] export-ignore
+*.[mM][aA][rR][kK][dD][oO][wW][nN] export-ignore
+/README.md -export-ignore
+/CHANGELOG.md -export-ignore
+/CONTRIBUTING.md -export-ignore
+/SECURITY.md -export-ignore
+/assets/NOTICE.md -export-ignore
+/.github/pull_request_template.md -export-ignore

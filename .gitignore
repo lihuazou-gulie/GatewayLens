@@ -39,3 +39,12 @@ SKILL.md
 .github/prompts/
 *.prompt.md
 *.instructions.md
+*.[mM][dD]
+*.[mM][dD][xX]
+*.[mM][aA][rR][kK][dD][oO][wW][nN]
+!/README.md
+!/CHANGELOG.md
+!/CONTRIBUTING.md
+!/SECURITY.md
+!/assets/NOTICE.md
+!/.github/pull_request_template.md
