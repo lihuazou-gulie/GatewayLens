@@ -22,8 +22,6 @@ const scenes = [
       ["mushrooms", "mushrooms"],
       ["stump", "stump"],
       ["sign", "sign"],
-      ["cow", "cow"],
-      ["sheep", "sheep"],
     ],
   },
   {
@@ -43,9 +41,6 @@ const scenes = [
       ["coins", "coins"],
       ["campfire", "campfire"],
       ["berries", "berries"],
-      ["duck", "duck"],
-      ["cat", "cat"],
-      ["dog", "dog"],
     ],
   },
 ];

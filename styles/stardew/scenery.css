@@ -154,19 +154,6 @@
   right: 1%;
   width: 50px;
 }
-:root[data-theme="stardew"] .farm-scene--meadow .farm-prop--cow {
-  left: 24%;
-  width: 72px;
-  bottom: 24px;
-  z-index: 3;
-}
-:root[data-theme="stardew"] .farm-scene--meadow .farm-prop--sheep {
-  left: 56%;
-  width: 62px;
-  bottom: 24px;
-  z-index: 3;
-  transform: scaleX(-1);
-}
 
 /* The footer becomes a small landscape; its links remain in their own row. */
 :root[data-theme="stardew"] footer {
@@ -262,25 +249,6 @@
   bottom: 18px;
   z-index: 3;
 }
-:root[data-theme="stardew"] .farm-scene--footer .farm-prop--duck {
-  left: calc(38% + 116px);
-  width: 32px;
-  bottom: 61px;
-  z-index: 3;
-  transform: scaleX(-1);
-}
-:root[data-theme="stardew"] .farm-scene--footer .farm-prop--cat {
-  right: calc(9% + 12px);
-  width: 38px;
-  bottom: 79px;
-  z-index: 3;
-}
-:root[data-theme="stardew"] .farm-scene--footer .farm-prop--dog {
-  left: 23%;
-  width: 51px;
-  bottom: 30px;
-  z-index: 3;
-}
 
 @media (max-width: 1150px) {
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--cave {
@@ -293,15 +261,6 @@
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--bridge {
     left: calc(35% + 30px);
     width: 91px;
-  }
-  :root[data-theme="stardew"] .farm-scene--footer .farm-prop--duck {
-    left: calc(35% + 104px);
-    width: 29px;
-    bottom: 57px;
-  }
-  :root[data-theme="stardew"] .farm-scene--footer .farm-prop--dog {
-    left: 26%;
-    width: 43px;
   }
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--stump {
     display: none;
@@ -353,14 +312,6 @@
     right: 0;
     width: 65px;
   }
-  :root[data-theme="stardew"] .farm-scene--meadow .farm-prop--cow {
-    left: 26%;
-    width: 56px;
-  }
-  :root[data-theme="stardew"] .farm-scene--meadow .farm-prop--sheep {
-    left: 57%;
-    width: 48px;
-  }
   :root[data-theme="stardew"] .farm-scene--footer {
     height: 132px;
   }
@@ -396,11 +347,6 @@
     width: 68px;
     bottom: 30px;
   }
-  :root[data-theme="stardew"] .farm-scene--footer .farm-prop--duck {
-    left: calc(30% + 78px);
-    width: 24px;
-    bottom: 51px;
-  }
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--flowers {
     left: 13%;
     width: 48px;
@@ -408,16 +354,6 @@
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--crate {
     right: 3%;
     width: 39px;
-  }
-  :root[data-theme="stardew"] .farm-scene--footer .farm-prop--cat {
-    right: calc(3% + 6px);
-    width: 28px;
-    bottom: 58px;
-  }
-  :root[data-theme="stardew"] .farm-scene--footer .farm-prop--dog {
-    left: 17%;
-    width: 33px;
-    bottom: 30px;
   }
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--fence {
     right: 0;
