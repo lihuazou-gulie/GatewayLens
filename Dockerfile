@@ -12,7 +12,7 @@ COPY server ./server
 
 FROM application AS tested
 COPY tests ./tests
-COPY scripts/capture-compose.mjs ./scripts/capture-compose.mjs
+COPY scripts/capture-compose.mjs scripts/demo.mjs ./scripts/
 RUN node --test tests/*.test.mjs
 
 FROM application AS runtime
