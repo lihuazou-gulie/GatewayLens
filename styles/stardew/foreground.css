@@ -1,0 +1,69 @@
+.header-foreground,
+.foreground-cluster {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.foreground-cluster {
+  --plant-scale: 1;
+}
+.foreground-cluster--woodland {
+  left: 0;
+  right: auto;
+  width: clamp(176px, 24%, 350px);
+}
+.foreground-cluster--garden {
+  left: 34%;
+  right: auto;
+  width: clamp(150px, 29%, 410px);
+}
+.foreground-cluster--edge {
+  left: auto;
+  right: -16px;
+  width: clamp(148px, 16%, 240px);
+}
+:root[data-theme="stardew"] .header-foreground .farm-prop {
+  left: var(--plant-x);
+  bottom: var(--plant-bottom);
+  width: calc(var(--plant-size) * var(--plant-scale));
+  z-index: var(--plant-depth);
+  transform: translateX(-50%) scaleX(var(--plant-mirror));
+}
+/* Keep the cottage in front of the planting; only the ground hides its foundation. */
+.sky-house {
+  z-index: 3;
+}
+@media (max-width: 1150px) {
+  .foreground-cluster--woodland {
+    width: 200px;
+  }
+  .foreground-cluster--garden {
+    left: 32%;
+  }
+  .foreground-cluster--understory {
+    --plant-scale: 0.9;
+  }
+}
+@media (max-width: 720px) {
+  .foreground-cluster {
+    --plant-scale: 0.76;
+  }
+  .foreground-cluster--woodland {
+    left: -12px;
+    width: 148px;
+  }
+  .foreground-cluster--garden {
+    left: 33%;
+    width: 29%;
+  }
+  .foreground-cluster--edge {
+    right: -30px;
+    width: 126px;
+  }
+  .foreground-cluster--understory {
+    --plant-scale: 0.66;
+  }
+  .foreground-cluster--understory .farm-prop:nth-child(3n) {
+    display: none;
+  }
+}

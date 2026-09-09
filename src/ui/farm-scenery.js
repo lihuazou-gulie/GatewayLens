@@ -1,20 +1,14 @@
 import { farmArtwork } from "./farm-artwork.js";
+import { createFarmSprite } from "./farm-sprite.js";
 import { createSkyScene } from "./sky/sky-scene.js";
+import { createHeaderForeground } from "./sky/foreground.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const scenes = [
   {
     host: ".topbar, .settings-topbar",
     name: "header",
-    props: [
-      ["tree", "tree"],
-      ["tree", "tree-far"],
-      ["fence", "fence"],
-      ["barrel", "barrel"],
-      ["flowers", "flowers"],
-      ["berries", "berries"],
-      ["chicken", "chicken"],
-    ],
+    props: [],
   },
   {
     host: "#overview-panels",
@@ -56,27 +50,6 @@ const scenes = [
   },
 ];
 
-function sprite(key, slot, eager) {
-  const art = farmArtwork[key],
-    [left, top, width, height] = art.bounds;
-  const node = document.createElement("span");
-  node.className = `farm-prop farm-prop--${slot}`;
-  node.style.aspectRatio = `${width} / ${height}`;
-  node.style.setProperty("--art-width", `${(art.size[0] / width) * 100}%`);
-  node.style.setProperty("--art-left", `${(-left / width) * 100}%`);
-  node.style.setProperty("--art-top", `${(-top / height) * 100}%`);
-  const image = document.createElement("img");
-  image.src = art.src;
-  image.alt = "";
-  image.width = art.size[0];
-  image.height = art.size[1];
-  image.loading = eager ? "eager" : "lazy";
-  image.decoding = "async";
-  image.draggable = false;
-  node.append(image);
-  return node;
-}
-
 function terrain(name) {
   const art = farmArtwork.soil;
   const svg = document.createElementNS(SVG_NS, "svg");
@@ -117,11 +90,14 @@ export function initFarmScenery() {
       node.className = `farm-scene farm-scene--${scene.name}`;
       node.setAttribute("aria-hidden", "true");
       node.append(
-        ...scene.props.map(([key, slot]) => sprite(key, slot, scene.name === "header")),
+        ...scene.props.map(([key, slot]) => createFarmSprite(key, slot)),
         terrain(scene.name),
       );
       scene.name === "footer" ? host.prepend(node) : host.append(node);
-      if (scene.name === "header") createSkyScene(node);
+      if (scene.name === "header") {
+        createSkyScene(node);
+        node.append(createHeaderForeground());
+      }
     }
   };
   mount();

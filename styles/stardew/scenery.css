@@ -58,44 +58,6 @@
   height: var(--sky-height);
   z-index: 0;
 }
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--tree {
-  left: 3%;
-  width: 92px;
-  bottom: 10px;
-}
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--tree-far {
-  right: 2%;
-  width: 85px;
-  bottom: 15px;
-  transform: scaleX(-1);
-}
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--fence {
-  right: 40%;
-  width: 90px;
-  bottom: 9px;
-}
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--barrel {
-  right: 37%;
-  width: 35px;
-  bottom: 13px;
-}
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--flowers {
-  left: 12%;
-  width: 85px;
-  bottom: 11px;
-  z-index: 3;
-}
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--berries {
-  right: 26%;
-  width: 62px;
-  bottom: 13px;
-}
-:root[data-theme="stardew"] .farm-scene--header .farm-prop--chicken {
-  right: 34%;
-  width: 36px;
-  bottom: 16px;
-  z-index: 3;
-}
 :root[data-theme="stardew"] .farm-scene--header .farm-ground {
   height: 18px;
 }
@@ -321,15 +283,6 @@
 }
 
 @media (max-width: 1150px) {
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree {
-    left: 2%;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree-far {
-    right: 0;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--chicken {
-    right: 35%;
-  }
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--cave {
     width: 122px;
   }
@@ -359,30 +312,6 @@
     --sky-height: 128px;
     padding-top: calc(var(--sky-height) + 12px);
     padding-bottom: 14px;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree {
-    left: -6px;
-    width: 78px;
-    bottom: 10px;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree-far {
-    display: none;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--fence {
-    right: 43%;
-    width: 73px;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--flowers {
-    left: 3px;
-    width: 56px;
-  }
-  :root[data-theme="stardew"] .farm-scene--header .farm-prop--chicken {
-    right: 43%;
-    width: 27px;
-    bottom: 16px;
-  }
-  :root[data-theme="stardew"] .farm-scene--header :is(.farm-prop--barrel, .farm-prop--berries) {
-    display: none;
   }
   :root[data-theme="stardew"] .metric-grid {
     gap: 21px;
