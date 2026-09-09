@@ -8,6 +8,7 @@ deploy
 docs
 scripts/*
 !scripts/capture-compose.mjs
+!scripts/demo.mjs
 outputs
 /data
 secrets
