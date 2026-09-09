@@ -20,6 +20,7 @@ import {
   createNote,
 } from "./cards.js";
 import { summaryMetrics, poolRows, systemMetrics } from "./metrics.js";
+import { renderHeadings } from "./headings.js";
 
 export function createMonitorRenderer() {
   const list = (id, key, create) => createKeyedList(document.getElementById(id), key, create);
@@ -59,30 +60,7 @@ export function createMonitorRenderer() {
     show("groups-heading", !modelsView);
     show("group-grid", !modelsView);
     show("overview-panels", view === "overview");
-    setText(
-      "view-eyebrow",
-      modelsView
-        ? "MODELS / PERFORMANCE"
-        : view === "groups"
-          ? "GROUPS / OBSERVABILITY"
-          : "LIVE / OVERVIEW",
-    );
-    setText(
-      "view-title",
-      modelsView
-        ? "每个模型，都有迹可循"
-        : view === "groups"
-          ? "分组状态，清晰可见"
-          : "运行态势，一屏掌握",
-    );
-    setText(
-      "view-description",
-      modelsView
-        ? state.topic === "images"
-          ? "图片请求关注完成耗时；并发与号池展示所选分组的整体负载。"
-          : "查看真实请求中的模型表现；图片专题关注完成耗时。"
-        : "关注服务质量、分组负载与模型表现。",
-    );
+    renderHeadings(state);
     setVisible(
       notice,
       Boolean(error) || data?.state === "unconfigured" || data?.state === "partial",
@@ -130,17 +108,12 @@ export function createMonitorRenderer() {
         show(id, false);
       for (const list of [metrics, groups, models, pool, system]) list.clear();
       clearTrendChart(chart);
-      setText("site-name", data?.title || "SUB2API");
-      if (document.title !== "Sub2API 监控") document.title = "Sub2API 监控";
       toggleClass(document.body, "pool-health-critical", false);
       setText("updated-at", "等待可用的数据快照");
       options(document.getElementById("scope-select"), [["all", "全部已选分组"]], "all");
       options(document.getElementById("model-select"), [["", "全部"]], "");
       return;
     }
-    setText("site-name", data.title);
-    const title = `${data.title} · ${view === "overview" ? "总览" : view === "groups" ? "分组" : "模型专题"}`;
-    if (document.title !== title) document.title = title;
     setText("updated-at", `快照 ${timestamp(data.generatedAt)}`);
     options(
       document.getElementById("scope-select"),

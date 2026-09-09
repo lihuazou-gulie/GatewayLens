@@ -22,7 +22,14 @@ export class MonitoringService {
       throw new DomainError("unauthenticated", "面板尚未公开，请登录后查看");
     const filter = selectScope(display, input, (id) => this.configurations.scopeId(id));
     if (!settings.connection || !filter.groups.length)
-      return { state: "unconfigured", title: display.title, groups: [], modules: display.modules };
+      return {
+        state: "unconfigured",
+        title: display.title,
+        overviewTitle: display.overviewTitle,
+        overviewSubtitle: display.overviewSubtitle,
+        groups: [],
+        modules: display.modules,
+      };
     if (this.version !== revision) {
       this.invalidate();
       this.version = revision;
@@ -99,6 +106,8 @@ export class MonitoringService {
     return {
       state: partial ? "partial" : "ok",
       title: display.title,
+      overviewTitle: display.overviewTitle,
+      overviewSubtitle: display.overviewSubtitle,
       range: filter.range,
       generatedAt: period.end,
       modules: display.modules,

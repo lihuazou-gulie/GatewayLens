@@ -25,7 +25,7 @@ docker run --rm -i --network none --read-only --user 1000:1000 --cap-drop ALL \
   --mount "type=volume,source=$restore_volume,target=/data" --entrypoint tar "$KANBAN_IMAGE" -C /data -xzf - < "$backup/data.tar.gz"
 docker run --rm --network none --read-only --user 1000:1000 --cap-drop ALL \
   --mount "type=volume,source=$restore_volume,target=/data" --entrypoint node "$KANBAN_IMAGE" --input-type=module -e \
-  'import {openPersistence} from "./server/bootstrap/persistence.mjs"; import {ConfigurationRepository} from "./server/modules/configuration/infrastructure/configuration-repository.mjs"; const {store,vault}=await openPersistence("/data"); const s=new ConfigurationRepository(store,vault); if(s.snapshot().connection.apiKey!=="demo-admin-key-not-production")process.exit(1); console.log("Private volume restore and decryption passed");'
+  'import {openPersistence} from "./server/bootstrap/persistence.mjs"; import {ConfigurationRepository} from "./server/modules/configuration/infrastructure/configuration-repository.mjs"; const {store,vault}=await openPersistence("/data"); const s=new ConfigurationRepository(store,vault).snapshot(); if(s.connection.apiKey!=="demo-admin-key-not-production" || s.display.overviewTitle!=="容器重建后保留标题" || s.display.overviewSubtitle!=="备份恢复后保留站点文案。" || s.display.title!=="容器验收 · 模拟数据")process.exit(1); console.log("Private volume restore, site copy and decryption passed");'
 fault="$KANBAN_BACKUP_DIR/fault.yaml"
 cat > "$fault" <<'YAML'
 services:

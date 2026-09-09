@@ -1,5 +1,6 @@
 import { KanbanApi } from "../api/client.js";
 import { renderAuth, renderSettings, readDisplay, readProbe } from "./render.js";
+import { readSiteCopy, renderSiteCopy, renderSiteBranding } from "./site-copy.js";
 import { statuses } from "../data/statuses.js";
 import { initTheme } from "../ui/theme.js";
 import { initFarmScenery } from "../ui/farm-scenery.js";
@@ -16,6 +17,7 @@ function message(text, error = false) {
 }
 async function loadSettings() {
   settings = await api.request("admin/settings");
+  renderSiteCopy(settings.display);
   renderSettings(settings, [], null);
   if (settings.connection) {
     document.getElementById("display-section").hidden = true;
@@ -26,6 +28,7 @@ async function loadSettings() {
 }
 async function loadStatus() {
   status = await api.request("bootstrap");
+  renderSiteBranding(status.siteCopy);
   renderAuth(status);
   if (status.authenticated) await loadSettings();
 }
@@ -86,6 +89,19 @@ submit("connection-form", async () => {
   document.getElementById("site-key").value = "";
   await loadSettings();
   message("连接已保存，请选择监控分组和展示模块。");
+});
+submit("site-copy-form", async () => {
+  const result = await api.request("admin/site-copy", {
+    method: "PUT",
+    body: { revision: settings.revision, siteCopy: readSiteCopy() },
+  });
+  settings = {
+    ...settings,
+    revision: result.revision,
+    display: { ...settings.display, ...result.siteCopy },
+  };
+  renderSiteCopy(result.siteCopy);
+  message("站点文案已保存，刷新监控面板即可查看。");
 });
 submit("display-form", async () => {
   await api.request("admin/display", {

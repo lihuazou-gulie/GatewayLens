@@ -29,6 +29,7 @@ export function migrateSettings(input) {
     typeof state.probe !== "object"
   )
     throw new Error("Invalid settings document");
+  state.display = { ...structuredClone(DEFAULT_DISPLAY), ...state.display };
   state.probe = {
     config: { ...structuredClone(DEFAULT_PROBE), ...state.probe.config },
     secret: state.probe.secret || null,

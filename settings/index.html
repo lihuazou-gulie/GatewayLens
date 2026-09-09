@@ -17,7 +17,7 @@
       <header class="settings-topbar">
         <a class="brand" href="/"
           ><span class="brand-mark"><span></span><span></span><span></span></span
-          ><strong>SUB2API MONITOR</strong></a
+          ><strong id="settings-site-name">Sub2API 监控</strong></a
         ><a class="settings-back-link" href="/">返回监控面板 ↗</a>
       </header>
       <main>
@@ -51,6 +51,42 @@
           </form>
         </section>
         <div id="admin-section" hidden>
+          <section class="panel settings-panel" id="site-copy-section" hidden>
+            <div class="settings-section-head">
+              <div>
+                <p class="eyebrow">SITE / WORDING</p>
+                <h2>站点文案</h2>
+              </div>
+            </div>
+            <form id="site-copy-form" class="settings-form-columns">
+              <label
+                >站点名称<input
+                  id="site-title"
+                  maxlength="60"
+                  required
+                  aria-describedby="site-title-note"
+              /></label>
+              <label>总览主标题<input id="overview-title" maxlength="80" required /></label>
+              <p class="field-note settings-field-wide" id="site-title-note">
+                站点名称用于各页面顶部和浏览器标签页，最多 60 个字符；总览主标题最多 80 个字符。
+              </p>
+              <label class="settings-field-wide"
+                >总览副标题<input
+                  id="overview-subtitle"
+                  maxlength="160"
+                  required
+                  aria-describedby="site-copy-note"
+              /></label>
+              <p class="field-note settings-field-wide" id="site-copy-note">
+                主标题和副标题显示在总览顶部，副标题最多 160
+                个字符。三项均为公开的纯文本，保存后对所有访客生效。
+              </p>
+              <div class="form-actions settings-field-wide">
+                <button class="button primary" type="submit">保存站点文案</button>
+                <a class="button subtle" href="/">查看面板 ↗</a>
+              </div>
+            </form>
+          </section>
           <section class="panel settings-panel" id="connection-section">
             <div class="settings-section-head">
               <div>
@@ -101,7 +137,6 @@
                 <button type="button" class="button subtle" id="reload-groups">重新读取分组</button>
               </div>
               <form id="display-form">
-                <label>面板名称<input id="display-title" maxlength="60" required /></label>
                 <fieldset>
                   <legend>监控分组</legend>
                   <p class="field-note">勾选需要展示的分组，可修改公开名称；列表顺序即展示顺序。</p>

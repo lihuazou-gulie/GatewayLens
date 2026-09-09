@@ -54,7 +54,7 @@ test("a complete private volume backup restores credentials and display configur
       baseUrl: "https://example.test/api/v1",
       apiKey: "synthetic-restore-key",
     });
-    repository.setDisplay(tx, { ...repository.snapshot(tx).display, title: "Restored" });
+    repository.setSiteCopy(tx, { ...repository.snapshot(tx).display, title: "Restored" });
   });
   const backup = join(await mkdtemp(join(tmpdir(), "gatewaylens-restore-")), "data");
   await cp(dir, backup, { recursive: true, errorOnExist: true, force: false });

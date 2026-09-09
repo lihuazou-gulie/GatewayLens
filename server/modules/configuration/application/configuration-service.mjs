@@ -1,6 +1,7 @@
 import { DomainError } from "../../../shared/domain/errors.mjs";
 import { validateDisplay } from "../domain/display.mjs";
 import { normalizeSite } from "../domain/connection.mjs";
+import { selectSiteCopy, validateSiteCopy } from "../domain/site-copy.mjs";
 export class ConfigurationService {
   constructor({ repository, unitOfWork, catalog, testConnection, probeConfiguration, allowHttp }) {
     Object.assign(this, {
@@ -19,6 +20,17 @@ export class ConfigurationService {
       display,
       connection: connection ? { baseUrl: connection.baseUrl, configured: true } : null,
     };
+  }
+  siteCopy() {
+    return selectSiteCopy(this.repository.snapshot().display);
+  }
+  async saveSiteCopy({ revision, siteCopy: input }) {
+    this.requireRevision(revision);
+    const siteCopy = validateSiteCopy(input);
+    return this.unitOfWork.transact(revision, (tx) => {
+      this.repository.setSiteCopy(tx, siteCopy);
+      return { ok: true, revision: revision + 1, siteCopy };
+    });
   }
   async saveDisplay({ revision, display: input }) {
     const display = validateDisplay(input, await this.catalog());

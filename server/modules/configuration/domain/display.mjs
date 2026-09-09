@@ -1,7 +1,8 @@
 import { DomainError } from "../../../shared/domain/errors.mjs";
+import { DEFAULT_SITE_COPY } from "./site-copy.mjs";
 export const MODULES = ["quality", "traffic", "capacity", "pool", "models"];
 export const DEFAULT_DISPLAY = Object.freeze({
-  title: "Sub2API 监控",
+  ...DEFAULT_SITE_COPY,
   public: true,
   groups: [],
   imageModels: [],
@@ -11,8 +12,6 @@ export const DEFAULT_DISPLAY = Object.freeze({
 export function validateDisplay(input, catalog) {
   if (!input || typeof input !== "object" || Array.isArray(input))
     throw new DomainError("validation", "设置格式无效");
-  const title = String(input.title || "").trim();
-  if (!title || title.length > 60) throw new DomainError("validation", "面板名称需要 1–60 个字符");
   if (!Array.isArray(input.groups) || input.groups.length > 24)
     throw new DomainError("validation", "最多选择 24 个分组");
   const allowed = new Set(catalog.map((g) => g.id));
@@ -38,7 +37,6 @@ export function validateDisplay(input, catalog) {
   if (!Number.isFinite(poolThreshold) || poolThreshold < 0 || poolThreshold > 100)
     throw new DomainError("validation", "可用率阈值应在 0–100 之间");
   return {
-    title,
     public: input.public === true,
     groups,
     imageModels,

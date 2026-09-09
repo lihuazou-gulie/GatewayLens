@@ -1,12 +1,16 @@
 import { route } from "../../../../shared/interfaces/http/router.mjs";
 import { setSessionCookie } from "./cookies.mjs";
-export function identityRoutes({ identity, sessions }) {
+export function identityRoutes({ identity, sessions, configuration }) {
   const login = (context) => setSessionCookie(context.response, sessions.issue(), context.secure);
   return [
     route(
       "GET",
       "/api/bootstrap",
-      (context) => ({ initialized: identity.initialized(), authenticated: context.authenticated }),
+      (context) => ({
+        initialized: identity.initialized(),
+        authenticated: context.authenticated,
+        siteCopy: configuration.siteCopy(),
+      }),
       { auth: false },
     ),
     route(

@@ -31,7 +31,6 @@ export function renderSettings(settings, groups, probe = null) {
   document.getElementById("site-key").value = "";
   setText("saved-connection", settings.connection ? "连接已保存" : "尚未连接");
   show("display-section", Boolean(settings.connection));
-  document.getElementById("display-title").value = d.title;
   document.getElementById("image-models").value = d.imageModels.join("\n");
   document.getElementById("pool-threshold").value = d.poolThreshold;
   document.getElementById("public-display").checked = d.public;
@@ -136,7 +135,6 @@ function renderProbe(settings, groups, probe) {
 }
 export function readDisplay() {
   return {
-    title: document.getElementById("display-title").value,
     public: document.getElementById("public-display").checked,
     imageModels: document
       .getElementById("image-models")

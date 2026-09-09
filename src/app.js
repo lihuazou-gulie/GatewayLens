@@ -85,7 +85,7 @@ try {
   const status = await api.request("bootstrap");
   if (!status.initialized) location.replace("/settings");
   else {
-    store.set({ admin: status.authenticated });
+    store.set({ admin: status.authenticated, siteCopy: status.siteCopy });
     poller.start();
   }
 } catch (e) {

@@ -6,6 +6,7 @@ import { startRenderingHarness } from "./browser-harness.mjs";
 import { startDemo } from "./demo.mjs";
 import { verifyAdminJourney, verifyView } from "../tests/browser/admin-journey.mjs";
 import { verifyPixelSky } from "../tests/browser/pixel-sky.mjs";
+import { verifySiteCopy, DEMO_SITE_COPY } from "../tests/browser/site-copy.mjs";
 
 const outputDir =
   process.env.BROWSER_ARTIFACT_DIR ||
@@ -28,6 +29,10 @@ try {
   await expect(page.locator("#render-test-result")).toContainText("PASS", { timeout: 30000 });
   checks.push(await page.locator("#render-test-result").innerText());
   await verifyAdminJourney(page, demo);
+  await verifySiteCopy(page, demo.dashboard, outputDir);
+  checks.push(
+    "Site copy: independent save before connection/offline, draft preservation, stale revision, plain text, reload, both themes at 7 widths",
+  );
   checks.push(
     "Initialization, connection test/save, group selection/order, display save, synthetic probe",
   );
@@ -76,6 +81,7 @@ try {
     await page.locator("#logout").click();
     await expect(page.locator("#auth-section")).toBeVisible();
     await expect(page.locator("#auth-title")).toHaveText("登录管理后台");
+    await expect(page.locator("#settings-site-name")).toHaveText(DEMO_SITE_COPY.title);
     await page.screenshot({
       path: join(outputDir, theme + "-login-mobile.png"),
       fullPage: true,

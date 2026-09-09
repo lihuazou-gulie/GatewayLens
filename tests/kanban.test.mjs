@@ -9,6 +9,7 @@ import { openPersistence } from "../server/bootstrap/persistence.mjs";
 import { ConfigurationRepository } from "../server/modules/configuration/infrastructure/configuration-repository.mjs";
 import { TimedValueCache } from "../server/shared/infrastructure/cache/timed-cache.mjs";
 import { normalizeSite } from "../server/modules/configuration/domain/connection.mjs";
+import { DEFAULT_SITE_COPY } from "../server/modules/configuration/domain/site-copy.mjs";
 import { Sub2ApiClient } from "../server/shared/infrastructure/sub2api/client.mjs";
 import {
   fixtureSub2Api,
@@ -69,7 +70,6 @@ async function harness(t, fixtureOptions = {}) {
         revision: app.persistence.store.revision,
         display: {
           ...app.configuration.settings().display,
-          title: "测试监控",
           public: true,
           groups: DEMO_GROUPS.slice(0, 3).map((g) => ({ id: g.id, label: g.name })),
           imageModels: ["gpt-image-2"],
@@ -86,6 +86,7 @@ test("starts without Runtime or Sub2API and protects one-time initialization", a
   assert.deepEqual((await h.request("bootstrap")).data, {
     initialized: false,
     authenticated: false,
+    siteCopy: DEFAULT_SITE_COPY,
   });
   assert.equal((await h.request("admin/settings")).status, 401);
   assert.equal(

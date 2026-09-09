@@ -46,6 +46,10 @@ textarea:focus-visible {
   gap: 24px;
   margin-bottom: 32px;
 }
+.page-heading > div:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 h1 {
   margin: 10px 0;
   font-size: clamp(28px, 3vw, 44px);

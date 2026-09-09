@@ -3,6 +3,11 @@ import { readFile } from "node:fs/promises";
 import { DEMO_KEY, DEMO_GROUPS } from "./fixtures/sub2api.mjs";
 const origin = "http://runtime-command-center:8787";
 const password = "container-test-password-only";
+const siteCopy = {
+  title: "容器验收 · 模拟数据",
+  overviewTitle: "容器重建后保留标题",
+  overviewSubtitle: "备份恢复后保留站点文案。",
+};
 let cookie = "";
 async function request(
   path,
@@ -26,6 +31,11 @@ if (!boot.initialized) {
   const code = (await readFile("/monitor-data/setup-code", "utf8")).trim();
   await request("setup", { body: { code, password } });
   let settings = await request("admin/settings");
+  await request("admin/site-copy", {
+    method: "PUT",
+    body: { revision: settings.revision, siteCopy },
+  });
+  settings = await request("admin/settings");
   await request("admin/connection", {
     body: { revision: settings.revision, site: "http://sub2api-fixture:8080", apiKey: DEMO_KEY },
   });
@@ -36,7 +46,6 @@ if (!boot.initialized) {
       revision: settings.revision,
       display: {
         ...settings.display,
-        title: "容器验收 · 模拟数据",
         public: true,
         groups: DEMO_GROUPS.slice(0, 3).map((g) => ({ id: g.id, label: g.name })),
         imageModels: ["gpt-image-2"],
@@ -45,9 +54,12 @@ if (!boot.initialized) {
   });
 } else await request("login", { body: { password } });
 const settings = await request("admin/settings");
+for (const [key, value] of Object.entries(siteCopy)) assert.equal(settings.display[key], value);
 assert.equal(JSON.stringify(settings).includes(DEMO_KEY), false);
 assert.equal(settings.connection.configured, true);
 const publicData = await request("monitor", { auth: false });
+for (const [key, value] of Object.entries(siteCopy)) assert.equal(publicData[key], value);
+assert.deepEqual((await request("bootstrap", { auth: false })).siteCopy, siteCopy);
 assert.equal(publicData.state, "ok");
 assert.equal(publicData.groups.length, 3);
 assert.equal(publicData.summary.pool.total, 5);
