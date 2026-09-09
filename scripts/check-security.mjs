@@ -1,6 +1,5 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
-import { resolve } from "node:path";
 const history = process.argv.includes("--history");
 const rules = {
   private_key: /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/,
@@ -12,19 +11,21 @@ const rules = {
 };
 const forbiddenPath =
   /(^|\/)(?:runtime\.env|\.env(?!\.example$)|settings\.json|setup-code|encryption\.key)$|\.(?:p12|pfx|pem|key|log)$/i;
+const privateWorkspacePath =
+  /^docs(?:\/|$)|(^|\/)(?:AGENTS(?:\.local)?\.md|CLAUDE(?:\.local)?\.md|GEMINI\.md|SKILL\.md|\.cursorrules|\.windsurfrules|\.aider[^/]*|\.(?:codex|claude|cursor|windsurf|agents))(?:\/|$)|^\.github\/(?:copilot-instructions\.md$|(?:instructions|prompts)\/)|\.(?:prompt|instructions)\.md$/i;
 const hits = [];
 let scanned = 0;
 function workspaceFiles() {
-  let gitRoot;
+  let gitPrefix;
   try {
-    gitRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], {
+    gitPrefix = execFileSync("git", ["rev-parse", "--show-prefix"], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     }).trim();
   } catch {
     /* A source archive has no Git metadata. */
   }
-  if (gitRoot && resolve(gitRoot) === process.cwd()) {
+  if (gitPrefix === "") {
     return execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "-z"], {
       encoding: "utf8",
     })
@@ -49,6 +50,8 @@ function workspaceFiles() {
 }
 function scan(path, bytes, revision = "worktree") {
   if (forbiddenPath.test(path)) hits.push({ path, revision, rule: "private_file" });
+  if (privateWorkspacePath.test(path))
+    hits.push({ path, revision, rule: "private_workspace_file" });
   if (bytes.includes(0) || bytes.length > 2 * 1024 * 1024) return;
   scanned++;
   for (const [index, line] of bytes.toString("utf8").split(/\r?\n/).entries()) {
@@ -67,24 +70,38 @@ function scan(path, bytes, revision = "worktree") {
   }
 }
 if (history) {
-  const entries = execFileSync("git", ["rev-list", "--objects", "HEAD"], {
+  const trees = execFileSync("git", ["log", "--format=%T", "HEAD"], {
     encoding: "utf8",
     maxBuffer: 32 * 1024 * 1024,
   })
     .trim()
     .split("\n");
+  const pathsByBlob = new Map();
+  for (const tree of new Set(trees)) {
+    const entries = execFileSync("git", ["ls-tree", "-rz", "--full-tree", tree], {
+      encoding: "utf8",
+      maxBuffer: 32 * 1024 * 1024,
+    }).split("\0");
+    for (const entry of entries.filter(Boolean)) {
+      const tab = entry.indexOf("\t"),
+        [, type, oid] = entry.slice(0, tab).split(" ");
+      if (type !== "blob") continue;
+      if (!pathsByBlob.has(oid)) pathsByBlob.set(oid, new Set());
+      pathsByBlob.get(oid).add(entry.slice(tab + 1));
+    }
+  }
   const data = execFileSync("git", ["cat-file", "--batch"], {
-    input: entries.map((line) => line.slice(0, 40)).join("\n") + "\n",
+    input: [...pathsByBlob.keys()].join("\n") + "\n",
     maxBuffer: 256 * 1024 * 1024,
   });
   let offset = 0;
-  for (const entry of entries) {
+  for (const paths of pathsByBlob.values()) {
     const end = data.indexOf(10, offset),
       [oid, type, rawSize] = data.subarray(offset, end).toString().split(" ");
     const size = Number(rawSize),
       bytes = data.subarray(end + 1, end + 1 + size);
     offset = end + 1 + size + 1;
-    if (type === "blob") scan(entry.slice(41), bytes, oid.slice(0, 12));
+    if (type === "blob") for (const path of paths) scan(path, bytes, oid.slice(0, 12));
   }
 } else {
   const files = workspaceFiles();

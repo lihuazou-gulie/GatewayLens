@@ -4,3 +4,5 @@ outputs/
 test-results/
 playwright-report/
 package-lock.json
+docs/
+AGENTS.md
