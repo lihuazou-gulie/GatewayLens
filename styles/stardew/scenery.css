@@ -38,13 +38,15 @@
   background: #3c7839;
 }
 
-/* Foreground trees sit behind the navigation, with a clear area for controls. */
+/* The landscape has its own band, above the sign and navigation. */
 :root[data-theme="stardew"] :is(.topbar, .settings-topbar) {
   position: relative;
   isolation: isolate;
-  min-height: 150px;
+  --sky-height: 144px;
+  min-height: 0;
   align-items: end;
-  padding-bottom: 25px;
+  padding-top: calc(var(--sky-height) + 12px);
+  padding-bottom: 16px;
 }
 :root[data-theme="stardew"] :is(.topbar, .settings-topbar) > :not(.farm-scene) {
   position: relative;
@@ -52,43 +54,44 @@
 }
 :root[data-theme="stardew"] .farm-scene--header {
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  height: var(--sky-height);
   z-index: 0;
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree {
-  left: 28%;
-  width: 104px;
+  left: 3%;
+  width: 92px;
   bottom: 10px;
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree-far {
-  right: 11%;
-  width: 93px;
+  right: 2%;
+  width: 85px;
   bottom: 15px;
   transform: scaleX(-1);
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--fence {
-  right: 20%;
+  right: 40%;
   width: 90px;
   bottom: 9px;
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--barrel {
-  right: 18%;
+  right: 37%;
   width: 35px;
   bottom: 13px;
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--flowers {
-  left: 34%;
+  left: 12%;
   width: 85px;
   bottom: 11px;
   z-index: 3;
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--berries {
-  right: 5%;
+  right: 26%;
   width: 62px;
   bottom: 13px;
 }
 :root[data-theme="stardew"] .farm-scene--header .farm-prop--chicken {
-  right: 29%;
+  right: 34%;
   width: 36px;
   bottom: 16px;
   z-index: 3;
@@ -319,13 +322,13 @@
 
 @media (max-width: 1150px) {
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree {
-    left: 32%;
+    left: 2%;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree-far {
     right: 0;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--chicken {
-    right: 12%;
+    right: 35%;
   }
   :root[data-theme="stardew"] .farm-scene--footer .farm-prop--cave {
     width: 122px;
@@ -353,22 +356,20 @@
 }
 @media (max-width: 720px) {
   :root[data-theme="stardew"] :is(.topbar, .settings-topbar) {
-    min-height: 195px;
-    padding-top: 20px;
-    padding-bottom: 55px;
+    --sky-height: 128px;
+    padding-top: calc(var(--sky-height) + 12px);
+    padding-bottom: 14px;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree {
     left: -6px;
-    width: 82px;
-    bottom: 30px;
+    width: 78px;
+    bottom: 10px;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--tree-far {
-    right: -5px;
-    width: 75px;
-    bottom: 41px;
+    display: none;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--fence {
-    right: 8px;
+    right: 43%;
     width: 73px;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--flowers {
@@ -376,7 +377,7 @@
     width: 56px;
   }
   :root[data-theme="stardew"] .farm-scene--header .farm-prop--chicken {
-    right: 26px;
+    right: 43%;
     width: 27px;
     bottom: 16px;
   }

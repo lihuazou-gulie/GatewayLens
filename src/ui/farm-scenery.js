@@ -1,4 +1,5 @@
 import { farmArtwork } from "./farm-artwork.js";
+import { createSkyScene } from "./sky/sky-scene.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const scenes = [
@@ -120,6 +121,7 @@ export function initFarmScenery() {
         terrain(scene.name),
       );
       scene.name === "footer" ? host.prepend(node) : host.append(node);
+      if (scene.name === "header") createSkyScene(node);
     }
   };
   mount();

@@ -1,0 +1,147 @@
+.pixel-sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--sky-top) 0%,
+    var(--sky-middle) 57%,
+    var(--sky-horizon) 100%
+  );
+  pointer-events: none;
+}
+.pixel-sky svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.sky-stars {
+  position: absolute;
+  inset: 0;
+  opacity: var(--sky-stars);
+}
+.sky-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #f6edd1;
+}
+.sky-star--cross {
+  box-shadow:
+    0 -2px #d2e2ee90,
+    0 2px #d2e2ee90,
+    -2px 0 #d2e2ee90,
+    2px 0 #d2e2ee90;
+}
+.sky-orb {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  transition:
+    left 60s linear,
+    top 60s linear,
+    opacity 30s linear;
+}
+.sky-sun {
+  left: var(--sun-x);
+  top: var(--sun-y);
+  opacity: var(--sun-opacity);
+}
+.sky-moon {
+  left: var(--moon-x);
+  top: var(--moon-y);
+  opacity: var(--moon-opacity);
+}
+.sky-cloud {
+  --cloud-render-width: var(--cloud-width);
+  position: absolute;
+  left: var(--cloud-rest-left);
+  top: var(--cloud-top);
+  width: calc(100cqi + 240px);
+  height: calc(var(--cloud-render-width) * 0.375);
+  opacity: calc(0.45 + var(--sky-daylight) * 0.4);
+  animation: pixel-cloud-drift var(--cloud-duration) linear var(--cloud-delay) infinite;
+  will-change: transform;
+}
+.sky-cloud svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cloud-render-width);
+}
+.sky-cloud svg:last-child {
+  left: 100%;
+}
+.sky-hills {
+  position: absolute;
+  bottom: 12px;
+  inset-inline: 0;
+  height: 68px;
+}
+.sky-house {
+  position: absolute;
+  right: 13%;
+  bottom: 12px;
+  width: 124px;
+  height: auto;
+  aspect-ratio: 120 / 104;
+}
+.sky-window-light {
+  opacity: var(--sky-windowLight);
+}
+.farm-scene--header {
+  --sky-top: #101a35;
+  --sky-middle: #253653;
+  --sky-horizon: #56677c;
+  --sky-cloud-light: #52627c;
+  --sky-cloud-shadow: #394860;
+  --sky-hill-far: #34475c;
+  --sky-hill-near: #293e49;
+  --sky-stars: 1;
+  --sky-daylight: 0;
+  --sky-windowLight: 1;
+}
+:root[data-theme="stardew"] .farm-scene--header :is(.farm-prop, .farm-ground) {
+  filter: brightness(calc(0.56 + var(--sky-daylight) * 0.44)) saturate(0.9);
+}
+.farm-scene--header[data-sky-running="false"] .sky-cloud {
+  animation-play-state: paused;
+}
+.farm-scene--header[data-sky-running="false"] .sky-orb {
+  transition: none;
+}
+@keyframes pixel-cloud-drift {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@media (max-width: 720px) {
+  .sky-house {
+    right: 8%;
+    width: 99px;
+    bottom: 12px;
+  }
+  .sky-orb {
+    width: 36px;
+    height: 36px;
+  }
+  .sky-cloud {
+    --cloud-render-width: calc(var(--cloud-width) * 0.72);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sky-cloud {
+    animation: none;
+    left: var(--cloud-rest-left);
+    transform: none;
+    will-change: auto;
+  }
+  .sky-orb {
+    transition: none;
+  }
+}

@@ -26,9 +26,7 @@
   margin: 0 calc(50% - 50cqi);
   padding: 16px max(22px, calc((100cqi - 1780px) / 2 + 8px)) 12px;
   border-bottom: 7px ridge #9e562b;
-  background:
-    linear-gradient(0deg, #70401e 0 9px, transparent 9px),
-    url("/assets/stardew-generated/farm-horizon-bg.png") center 61% / 100% auto;
+  background: url("/assets/stardew-generated/wood-planks.png") center / 512px 512px;
   box-shadow: 0 4px 0 #442413;
   backdrop-filter: none;
 }
@@ -224,7 +222,6 @@
   }
   :root[data-theme="stardew"] :is(.topbar, .settings-topbar) {
     padding: 12px 10px;
-    background-size: auto 220px;
   }
   :root[data-theme="stardew"] .topbar {
     display: flex;

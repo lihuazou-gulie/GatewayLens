@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { startRenderingHarness } from "./browser-harness.mjs";
 import { startDemo } from "./demo.mjs";
 import { verifyAdminJourney, verifyView } from "../tests/browser/admin-journey.mjs";
+import { verifyPixelSky } from "../tests/browser/pixel-sky.mjs";
 
 const outputDir =
   process.env.BROWSER_ARTIFACT_DIR ||
@@ -89,6 +90,10 @@ try {
         ": desktop/mobile overview, groups, models, settings, mobile login, persisted preference",
     );
   }
+  await verifyPixelSky(browser, demo.dashboard, outputDir);
+  checks.push(
+    "Pixel sky: visitor timezone, dawn/day/sunset/night, 7 viewport widths, moving clouds, reduced motion, visibility pause/resume, theme reuse, mobile login",
+  );
   const guest = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const guestPage = await guest.newPage();
   await verifyView(guestPage, demo.dashboard, "/");
