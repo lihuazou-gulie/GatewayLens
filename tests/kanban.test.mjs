@@ -87,6 +87,8 @@ test("starts without Runtime or Sub2API and protects one-time initialization", a
     initialized: false,
     authenticated: false,
     siteCopy: DEFAULT_SITE_COPY,
+    version: JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"))
+      .version,
   });
   assert.equal((await h.request("admin/settings")).status, 401);
   assert.equal(

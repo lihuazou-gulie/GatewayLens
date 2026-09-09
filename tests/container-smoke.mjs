@@ -27,6 +27,10 @@ async function request(
   return res.json();
 }
 const boot = await request("bootstrap");
+assert.equal(
+  boot.version,
+  JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8")).version,
+);
 if (!boot.initialized) {
   const code = (await readFile("/monitor-data/setup-code", "utf8")).trim();
   await request("setup", { body: { code, password } });

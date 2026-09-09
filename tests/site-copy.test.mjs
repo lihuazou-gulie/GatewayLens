@@ -177,7 +177,13 @@ test("site copy saves without an upstream, protects writes and survives other se
   const publicSnapshot = (await request("monitor", { auth: false })).data;
   assert.deepEqual(selectSiteCopy(publicSnapshot), revised);
   const bootstrap = (await request("bootstrap", { auth: false })).data;
-  assert.deepEqual(bootstrap, { initialized: true, authenticated: false, siteCopy: revised });
+  assert.deepEqual(bootstrap, {
+    initialized: true,
+    authenticated: false,
+    siteCopy: revised,
+    version: JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"))
+      .version,
+  });
   const restored = await openPersistence(demo.dataDir);
   assert.deepEqual(selectSiteCopy(restored.store.read().display), revised);
 

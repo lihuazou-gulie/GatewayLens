@@ -1,9 +1,11 @@
 import { expect } from "@playwright/test";
 import { DEMO_KEY, DEMO_PROBE_KEY, DEMO_GROUPS } from "../fixtures/sub2api.mjs";
 import { DEMO_SITE_COPY, verifyInitialSiteCopy } from "./site-copy.mjs";
+import { verifyProjectInfo } from "./project-info.mjs";
 export async function verifyAdminJourney(page, demo) {
   await page.goto(demo.dashboard + "/settings");
   await expect(page.locator("#auth-title")).toHaveText("初始化面板");
+  await verifyProjectInfo(page);
   await page.locator("#setup-code").fill(demo.app.identity.setupCode);
   await page.locator("#admin-password").fill("synthetic-browser-password");
   await page.locator("#auth-submit").click();
@@ -36,6 +38,7 @@ export async function verifyAdminJourney(page, demo) {
 export async function verifyView(page, origin, path) {
   await page.goto(origin + path);
   await expect(page.locator("#connection-status")).toContainText("已连接");
+  await verifyProjectInfo(page);
   await expect(page.locator("#site-name")).toHaveText(DEMO_SITE_COPY.title);
   await expect(page).toHaveTitle(new RegExp(DEMO_SITE_COPY.title));
   await expect(page.locator("#view-title")).toHaveText(

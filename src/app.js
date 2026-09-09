@@ -4,6 +4,7 @@ import { Poller } from "./core/poller.js";
 import { initAmbientEffects } from "./ui/effects.js";
 import { initTheme } from "./ui/theme.js";
 import { initFarmScenery } from "./ui/farm-scenery.js";
+import { renderProjectVersion } from "./ui/project-info.js";
 import { createMonitorRenderer } from "./monitor/render.js";
 const api = new KanbanApi();
 const params = new URLSearchParams(location.search);
@@ -83,6 +84,7 @@ document.addEventListener("visibilitychange", () => {
 });
 try {
   const status = await api.request("bootstrap");
+  renderProjectVersion(status.version);
   if (!status.initialized) location.replace("/settings");
   else {
     store.set({ admin: status.authenticated, siteCopy: status.siteCopy });

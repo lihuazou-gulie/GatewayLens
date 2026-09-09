@@ -4,6 +4,7 @@ import { readSiteCopy, renderSiteCopy, renderSiteBranding } from "./site-copy.js
 import { statuses } from "../data/statuses.js";
 import { initTheme } from "../ui/theme.js";
 import { initFarmScenery } from "../ui/farm-scenery.js";
+import { renderProjectVersion } from "../ui/project-info.js";
 initTheme();
 initFarmScenery();
 const api = new KanbanApi();
@@ -28,6 +29,7 @@ async function loadSettings() {
 }
 async function loadStatus() {
   status = await api.request("bootstrap");
+  renderProjectVersion(status.version);
   renderSiteBranding(status.siteCopy);
   renderAuth(status);
   if (status.authenticated) await loadSettings();

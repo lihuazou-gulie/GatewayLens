@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/gauge.css" />
     <link rel="stylesheet" href="/styles/monitor.css" />
     <link rel="stylesheet" href="/styles/stardew.css" />
+    <link rel="stylesheet" href="/styles/project-info.css" />
     <script type="module" src="/src/app.js"></script>
   </head>
   <body>
@@ -148,8 +149,37 @@
         </section>
       </main>
       <footer>
-        <span>SUB2API MONITOR · 聚合数据 · 只读采集</span
-        ><a href="/settings" class="settings-link">面板设置 ↗</a>
+        <div class="footer-content">
+          <div class="footer-notes">
+            <span>SUB2API MONITOR · 聚合数据 · 只读采集</span>
+            <a href="/settings" class="settings-link">面板设置 ↗</a>
+          </div>
+          <nav class="project-info" aria-label="开源项目信息">
+            <span class="project-identity"
+              >GatewayLens
+              <span
+                class="project-version"
+                data-project-version
+                aria-label="当前运行版本"
+                hidden
+              ></span
+            ></span>
+            <a
+              href="https://github.com/lihuazou-gulie/GatewayLens"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="在新标签页打开项目源码"
+              >GitHub <span aria-hidden="true">↗</span></a
+            >
+            <a
+              href="https://github.com/lihuazou-gulie/GatewayLens/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="在新标签页查看发布记录"
+              >更新日志 <span aria-hidden="true">↗</span></a
+            >
+          </nav>
+        </div>
       </footer>
     </div>
   </body>

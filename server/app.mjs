@@ -1,6 +1,7 @@
 import { createServer as httpServer } from "node:http";
 import { createServer as httpsServer } from "node:https";
 import { createApplication } from "./bootstrap/application.mjs";
+import { APP_VERSION } from "./bootstrap/version.mjs";
 import { createRouter, route } from "./shared/interfaces/http/router.mjs";
 import { HttpError, publicError } from "./shared/interfaces/http/errors.mjs";
 import { sendError, sendJson, serveStatic } from "./shared/interfaces/http/response.mjs";
@@ -33,7 +34,7 @@ export async function createGatewayLensServer({
   const router = createRouter(
     [
       route("GET", "/api/health", () => ({ ok: true }), { auth: false }),
-      ...identityRoutes(app),
+      ...identityRoutes({ ...app, version: APP_VERSION }),
       ...configurationRoutes(app.configuration),
       ...monitoringRoutes({
         monitor: app.monitor,

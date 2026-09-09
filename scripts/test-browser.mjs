@@ -7,6 +7,7 @@ import { startDemo } from "./demo.mjs";
 import { verifyAdminJourney, verifyView } from "../tests/browser/admin-journey.mjs";
 import { verifyPixelSky } from "../tests/browser/pixel-sky.mjs";
 import { verifySiteCopy, DEMO_SITE_COPY } from "../tests/browser/site-copy.mjs";
+import { verifyProjectInfo } from "../tests/browser/project-info.mjs";
 
 const outputDir =
   process.env.BROWSER_ARTIFACT_DIR ||
@@ -42,6 +43,10 @@ try {
     await expect(page.locator("#admin-section")).toBeVisible();
     await page.locator('[data-theme-choice][value="' + theme + '"]').check();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    await verifyProjectInfo(page);
+    await page
+      .locator("footer")
+      .screenshot({ path: join(outputDir, theme + "-footer-desktop.png"), animations: "disabled" });
     await page.screenshot({
       path: join(outputDir, theme + "-settings.png"),
       fullPage: true,
@@ -82,6 +87,15 @@ try {
     await expect(page.locator("#auth-section")).toBeVisible();
     await expect(page.locator("#auth-title")).toHaveText("登录管理后台");
     await expect(page.locator("#settings-site-name")).toHaveText(DEMO_SITE_COPY.title);
+    await verifyProjectInfo(page);
+    for (const width of [320, 390, 720]) {
+      await page.setViewportSize({ width, height: 844 });
+      await verifyProjectInfo(page);
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page
+      .locator("footer")
+      .screenshot({ path: join(outputDir, theme + "-footer-mobile.png"), animations: "disabled" });
     await page.screenshot({
       path: join(outputDir, theme + "-login-mobile.png"),
       fullPage: true,
@@ -109,7 +123,9 @@ try {
   await page.locator("#logout").click();
   await expect(page.locator("#auth-title")).toHaveText("登录管理后台");
   await expect(page.locator("#admin-section")).toBeHidden();
-  checks.push("Guest visibility, admin API denial, logout");
+  checks.push(
+    "Guest visibility, admin API denial, logout; project version and GitHub/release links on all pages, both themes and narrow screens",
+  );
   expect(errors).toEqual([]);
   await writeFile(
     join(outputDir, "result.json"),

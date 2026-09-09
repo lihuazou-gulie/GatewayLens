@@ -76,7 +76,7 @@ deploy/                    Nginx 与 systemd 示例
 | 接口                                           | 用途                                                                          |
 | ---------------------------------------------- | ----------------------------------------------------------------------------- |
 | `GET /api/health`                              | 进程健康                                                                      |
-| `GET /api/bootstrap`                           | 初始化/登录状态及白名单站点文案                                               |
+| `GET /api/bootstrap`                           | 初始化/登录状态、白名单站点文案和程序版本                                     |
 | `GET /api/monitor`                             | 已授权范围的聚合快照，支持 range/scope/model/topic 筛选                       |
 | `GET /api/admin/settings`                      | 管理设置，不回传 Key                                                          |
 | `PUT /api/admin/site-copy`                     | 独立保存 `{ revision, siteCopy: { title, overviewTitle, overviewSubtitle } }` |

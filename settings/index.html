@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/monitor.css" />
     <link rel="stylesheet" href="/styles/settings.css" />
     <link rel="stylesheet" href="/styles/stardew.css" />
+    <link rel="stylesheet" href="/styles/project-info.css" />
     <script type="module" src="/src/settings/app.js"></script>
   </head>
   <body>
@@ -290,8 +291,37 @@
         </div>
       </main>
       <footer>
-        <span>凭证加密保存在部署者自己的服务器</span
-        ><span>仅通过 Sub2API 管理接口读取监控数据</span>
+        <div class="footer-content">
+          <div class="footer-notes">
+            <span>凭证加密保存在部署者自己的服务器</span>
+            <span>仅通过 Sub2API 管理接口读取监控数据</span>
+          </div>
+          <nav class="project-info" aria-label="开源项目信息">
+            <span class="project-identity"
+              >GatewayLens
+              <span
+                class="project-version"
+                data-project-version
+                aria-label="当前运行版本"
+                hidden
+              ></span
+            ></span>
+            <a
+              href="https://github.com/lihuazou-gulie/GatewayLens"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="在新标签页打开项目源码"
+              >GitHub <span aria-hidden="true">↗</span></a
+            >
+            <a
+              href="https://github.com/lihuazou-gulie/GatewayLens/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="在新标签页查看发布记录"
+              >更新日志 <span aria-hidden="true">↗</span></a
+            >
+          </nav>
+        </div>
       </footer>
     </div>
   </body>
