@@ -29,6 +29,20 @@ bash scripts/deploy.sh
 
 自动构建并启动服务，更新已有实例时自动备份。宿主机需要 Docker Engine、Docker Compose（支持 `up --wait`）和 Bash，无需安装 Node.js。默认监听 `127.0.0.1:8787`；支持已有 HTTPS 代理，也支持一个容器直接提供 HTTPS，详见下方的[部署与回滚](#部署与回滚)。
 
+## 相关项目
+
+<p align="center">
+  <a href="https://github.com/yukkcat/chatgpt2api">
+    <img src="./AD.png" alt="chatgpt2api" width="800">
+  </a>
+</p>
+
+<p>
+  🚀 <a href="https://github.com/yukkcat/chatgpt2api"><strong>chatgpt2api</strong></a>
+  —— ChatGPT 官网接口纯协议逆向实现，兼容 OpenAI API，支持 GPT-Image-2、
+  批量生图 / 编辑图、号池管理及 Sub2API / CPA 号池导入。
+</p>
+
 ## 本地开发
 
 要求 Node.js 22 或更新版本，无第三方运行依赖。
